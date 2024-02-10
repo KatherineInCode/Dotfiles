@@ -1,0 +1,13 @@
+/*
+ Updates Apple's default keybindings for curly quotes.
+ See http://www.danandcheryl.com/2010/08/how-to-type-curly-quotes-in-mac-os-x
+
+ Save this file here:
+ ~/Library/KeyBindings/DefaultKeyBinding.dict
+*/
+{
+    "~[" = ("insertText:", "‘");
+    "~]" = ("insertText:", "’");
+    "~{" = ("insertText:", "“");
+    "~}" = ("insertText:", "”");
+}
