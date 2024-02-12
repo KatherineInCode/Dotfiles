@@ -6,9 +6,13 @@ This repository, as dotfiles repositories are apt to be, under constant construc
 
 ## Prerequisites
 
+- Clone this repository into `~/.df`
 - Install homebrew (`/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`)
 - Install Vundle (`git clone https://github.com/VundleVim/Vundle.vim.git dotfiles/.vim/bundle/Vundle.vim`)
-- Clone this repository into `~/.df`
+
+## Update script
+
+The `update.sh` script should take care of updating and installing necessary things, along with using `stow` to manage dotfiles.
 
 ## Other Configuration
 
