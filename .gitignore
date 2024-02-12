@@ -1,0 +1,7 @@
+# macOS
+.DS_Store
+
+# Vundle
+dotfiles/.vim/backup
+dotfiles/.vim/bundle
+dotfiles/.vim/.netrwhist
