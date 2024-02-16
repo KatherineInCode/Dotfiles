@@ -38,7 +38,6 @@ brew "ruby"
 brew "python"
 
 # Fonts
-brew "svn" # Needed for some reason?
 cask "font-meslo-for-powerline"
 cask "font-source-code-pro"
 cask "font-source-sans-pro"
