@@ -20,11 +20,11 @@ There are various other things I like to do to set up my environment.
 
 ### Shell
 
-To use the homebrew version of zsh:
+To use the homebrew version of bash:
 
 ```
-echo /opt/homebrew/bin/zsh >> /etc/shells
-chsh -s /opt/homebrew/bin/zsh
+echo /opt/homebrew/bin/bash >> /etc/shells
+chsh -s /opt/homebrew/bin/bash
 ```
 
 ### Terminal Theme
