@@ -83,7 +83,7 @@ I use "Shuffle All" under "Shuffle Aerials", and I shuffle "Continuously".
 
 ### Lock Screen
 
-Unless corporate policy is otherwise, I set my "Start Screen Saver when inactive" to "5 minutes", "Turn display off on battery when inactive" to "10 minutes", "Turn display off on power adapter when inactive" to "1 hour".
+Unless corporate policy is otherwise, I set my "Start Screen Saver when inactive" to "5 minutes", "Turn display off on battery when inactive" to "10 minutes", "Turn display off on power adapter when inactive" to "1 hour", and "Require password after screen saver begins or display is turned off" to "5 seconds".
 
 ### Keyboard
 
