@@ -29,7 +29,7 @@ chsh -s /opt/homebrew/bin/zsh
 
 ### Terminal Theme
 
-I use the theme called "Iridium" in the `files` folder. I'm not sure where exactly it comes from—and I've tweaked it a bit here and there.
+I use the theme called "Iridium" in the `files` folder. This is my tweaked version of [Hybrid](https://github.com/w0ng/vim-hybrid).
 
 ### Key Bindings
 
