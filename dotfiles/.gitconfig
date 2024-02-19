@@ -1,0 +1,38 @@
+[user]
+	name = Katherine Bertelsen
+	email = katherine@katherineincode.com
+[core]
+	excludesfile = ~/.gitignore
+	editor = /opt/homebrew/bin/vim
+[color]
+	ui = true
+[alias]
+	s = status -sb
+	st = status -sb
+	sta = status -sb
+	stat = status -sb
+	statu = status -sb
+	co = checkout
+	ci = commit
+	br = branch
+	graph = log --oneline --color --graph --decorate
+[push]
+	default = simple
+	autoSetupRemote = true
+[pull]
+	ff = only
+[include]
+	path = .local.gitconfig
+[credential]
+	helper = osxkeychain
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[init]
+	defaultBranch = main
+[tag]
+	sort = v:refname
+[branch]
+	sort = v:refname
