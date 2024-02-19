@@ -36,3 +36,5 @@
 	sort = v:refname
 [branch]
 	sort = v:refname
+[init]
+	defaultBranch = main
