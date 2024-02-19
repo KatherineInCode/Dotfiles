@@ -110,3 +110,31 @@ I set "Look up & data detectors" to "Tap with Three Fingers".
 I set "Swipe between full-screen applications" to "Swipe Left or Right with Four Fingers", because I use BetterTouchTool to make a three-finger swipe change tabs.
 
 I set "App Exposé" to "Swipe Down with Three Fingers".
+
+## Finder Settings
+
+A rundown of how I adjust settings in Finder to my liking. This section exists mostly for documentation purposes.
+
+### General
+
+I set "New Finder windows show" to my home directory.
+
+### Tags
+
+I don't show any tags in the sidebar.
+
+### Sidebar
+
+Items I show in the Sidebar: Applications, Desktop, Downloads, Developer, iCloud Drive, iCloud Shared, Hard Disks, External Disks, CDs, Cloud Storage, Bonjour Computers, Connected Servers.
+
+### Advanced
+
+I set "Show all filename extensions" to true.
+
+I set "When performing a search" to "Search the Current Folder".
+
+### Other
+
+I show the Library Folder. In the home directory, under View is "Show View Options", and it's listed there.
+
+Under the View menu, I also enable "Show Path Bar" and "Show Status Bar".
