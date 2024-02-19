@@ -38,6 +38,7 @@ brew "ruby"
 brew "python"
 
 # Fonts
+tap "homebrew/cask-fonts"
 cask "font-meslo-for-powerline"
 cask "font-source-code-pro"
 cask "font-source-sans-pro"
