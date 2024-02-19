@@ -8,6 +8,7 @@ This repository, as dotfiles repositories are apt to be, under constant construc
 
 - Clone this repository into `~/.df`
 - Install homebrew (`/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`)
+    - Note the update to the `.zprofile` file for the path
 - Install Vundle (`git clone https://github.com/VundleVim/Vundle.vim.git dotfiles/.vim/bundle/Vundle.vim`)
 
 ## Update script
