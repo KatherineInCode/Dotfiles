@@ -27,9 +27,23 @@ brew "swiftlint"
 cask "provisionql"
 cask "xcodes"
 
+# Android
+cask "android-studio"
+
+# API Development
+#cask "charles"
+brew "mkcert"
+brew "nss"
+
 # JSON
 brew "jq"
 cask "quicklook-json"
+
+# Node
+brew "node"
+
+# C#
+cask "powershell"
 
 # Ruby
 brew "ruby"

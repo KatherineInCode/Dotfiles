@@ -21,5 +21,5 @@ vim +PluginInstall +qall
 
 # Python
 
-pip3 install --quiet --upgrade pip
-pip3 install --quiet --user --upgrade -r ~/.df/Pipfile
+#pip3 install --quiet --upgrade pip
+#pip3 install --quiet --user --upgrade -r ~/.df/Pipfile
