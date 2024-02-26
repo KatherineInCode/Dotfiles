@@ -14,6 +14,7 @@ brew "git"
 brew "git-lfs"
 brew "tig"
 brew "git-filter-repo"
+brew "gnupg"
 
 # Development General
 brew "cloc"
