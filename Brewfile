@@ -27,6 +27,7 @@ cask "apparency"
 brew "swiftlint"
 cask "provisionql"
 cask "xcodes"
+brew "mint"
 
 # Android
 cask "android-studio"
