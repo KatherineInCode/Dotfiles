@@ -10,6 +10,7 @@ This repository, as dotfiles repositories are apt to be, under constant construc
 - Install homebrew (`/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`)
     - Note the update to the `.zprofile` file for the path
 - Install Vundle (`git clone https://github.com/VundleVim/Vundle.vim.git dotfiles/.vim/bundle/Vundle.vim`)
+- Install Rust (`curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`)
 
 ## Update script
 
