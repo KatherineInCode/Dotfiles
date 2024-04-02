@@ -89,6 +89,8 @@ Unless corporate policy is otherwise, I set my "Start Screen Saver when inactive
 
 ### Keyboard
 
+I use a `defaults write` command to make key repeat actually work: `defaults write -g ApplePressAndHoldEnabled -bool false`
+
 I set "Key repeat rate" to the fastest and "Delay until repeat" to the second-shortest.
 
 I set "Press 🌐 key to" to "Do nothing".
