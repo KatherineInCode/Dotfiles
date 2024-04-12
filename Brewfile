@@ -54,6 +54,12 @@ brew "ruby"
 # Python
 brew "python"
 
+# YAML
+brew "yq"
+
+# Database
+cask "dbeaver-community"
+
 # Fonts
 tap "homebrew/cask-fonts"
 cask "font-meslo-for-powerline"
