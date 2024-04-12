@@ -29,6 +29,7 @@ brew "swiftlint"
 cask "provisionql"
 cask "xcodes"
 brew "mint"
+cask "db-browser-for-sqlite"
 
 # Android
 cask "android-studio"
