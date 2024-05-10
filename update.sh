@@ -23,3 +23,9 @@ vim +PluginInstall +qall
 
 #pip3 install --quiet --upgrade pip
 #pip3 install --quiet --user --upgrade -r ~/.df/Pipfile
+
+# Rust
+
+rustup update
+
+./cargo.sh
