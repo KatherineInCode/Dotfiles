@@ -61,6 +61,10 @@ brew "yq"
 # Database
 cask "dbeaver-community"
 
+# Crowdin
+tap "crowdin/crowdin"
+brew "crowdin"
+
 # Fonts
 tap "homebrew/cask-fonts"
 cask "font-meslo-for-powerline"
