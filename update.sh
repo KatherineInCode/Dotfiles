@@ -2,6 +2,10 @@
 
 set -e
 
+# Git
+
+git distribute pull
+
 # Homebrew
 
 brew update
