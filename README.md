@@ -8,9 +8,10 @@ This repository, as dotfiles repositories are apt to be, under constant construc
 
 - Clone this repository into `~/.df`
 - Install homebrew (`/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`)
-    - Note the update to the `.zprofile` file for the path
+  - Note the update to the `.zprofile` file for the path
 - Install Vundle (`git clone https://github.com/VundleVim/Vundle.vim.git dotfiles/.vim/bundle/Vundle.vim`)
 - Install Rust (`curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`)
+- Install Rust Nightly (`rustup toolchain install nightly`)
 
 ## Update script
 
@@ -24,7 +25,7 @@ There are various other things I like to do to set up my environment.
 
 To use the homebrew version of bash:
 
-```
+```bash
 echo /opt/homebrew/bin/bash >> /etc/shells
 chsh -s /opt/homebrew/bin/bash
 ```
@@ -69,7 +70,7 @@ I set "Click wallpaper to reveal desktop" to "Only in Stage Manager".
 
 I turn off "Close windows when quitting an application".
 
-I turn off "Automaticall rearrange Spaces based on most recent use" and turn on "When switching to an application, switch to a Space with open windows for the application".
+I turn off "Automatically rearrange Spaces based on most recent use" and turn on "When switching to an application, switch to a Space with open windows for the application".
 
 #### Hot Corners
 
@@ -99,7 +100,7 @@ I set "Press 🌐 key to" to "Do nothing".
 
 Under "Mission Control", I turn off the move left/right key combinations, because they interfere with Xcode.
 
-Under "Splotlight", I turn off "Show Finder search window".
+Under "Spotlight", I turn off "Show Finder search window".
 
 Under "Modifier Keys", I set "Caps Lock" to "Escape".
 
