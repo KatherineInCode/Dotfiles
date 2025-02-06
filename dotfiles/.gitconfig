@@ -16,6 +16,7 @@
 	ci = commit
 	br = branch
 	graph = log --oneline --color --graph --decorate
+	list-merged = "!git --no-pager branch -vv | grep ': gone]' | grep -v '\\*' | awk '{ print $1; }'"
 [push]
 	default = simple
 	autoSetupRemote = true
