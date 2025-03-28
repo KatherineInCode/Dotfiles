@@ -10,7 +10,7 @@ git distribute pull
 
 brew update
 brew upgrade
-brew bundle --file=~/.df/Brewfile --no-lock
+brew bundle --file=~/.df/Brewfile
 brew cleanup
 
 # Stow the actual dotfiles
