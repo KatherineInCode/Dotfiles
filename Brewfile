@@ -1,5 +1,6 @@
 # Core
 brew "bash"
+brew "coreutils"
 brew "zsh"
 brew "stow"
 brew "vim"
