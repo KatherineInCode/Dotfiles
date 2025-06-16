@@ -67,7 +67,7 @@ tap "crowdin/crowdin"
 brew "crowdin"
 
 # Fonts
-tap "homebrew/cask-fonts"
+#tap "homebrew/cask-fonts"
 cask "font-meslo-for-powerline"
 cask "font-source-code-pro"
 cask "font-source-sans-3"
