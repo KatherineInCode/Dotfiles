@@ -28,7 +28,7 @@ brew "shellcheck"
 cask "apparency"
 brew "swiftlint"
 cask "provisionql"
-cask "xcodes"
+cask "xcodes-app"
 brew "mint"
 cask "db-browser-for-sqlite"
 
