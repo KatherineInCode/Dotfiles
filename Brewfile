@@ -31,6 +31,7 @@ cask "provisionql"
 cask "xcodes-app"
 brew "mint"
 cask "db-browser-for-sqlite"
+cask "asset-catalog-tinkerer"
 
 # Android
 cask "android-studio"
