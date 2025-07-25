@@ -17,6 +17,7 @@ brew "tig"
 brew "git-filter-repo"
 brew "gnupg"
 cask "github"
+brew "gh"
 
 # Development General
 brew "cloc"
