@@ -72,10 +72,27 @@ used_percentage=$(echo "$input" | jq -r '.context_window.used_percentage // empt
 # Build context info with graph
 context_info=""
 if [ -n "$used_percentage" ]; then
-    # Build a 10-character progress bar
+    # Build a 10-character progress bar with partial fill
     bar_width=10
-    filled=$(( used_percentage * bar_width / 100 ))
-    empty=$(( bar_width - filled ))
+    scaled=$(( used_percentage * bar_width ))
+    filled=$(( scaled / 100 ))
+    remainder=$(( scaled % 100 ))
+
+    # Determine partial character based on remainder (0-99)
+    # Empty (0-33%), ▒ medium (34-66%), ▓ dark (67-99%)
+    partial_char=""
+    if [ "$filled" -lt "$bar_width" ]; then
+        if [ "$remainder" -ge 67 ]; then
+            partial_char="▓"
+        elif [ "$remainder" -ge 34 ]; then
+            partial_char="▒"
+        fi
+    fi
+
+    # Calculate empty slots
+    has_partial=0
+    if [ -n "$partial_char" ]; then has_partial=1; fi
+    empty=$(( bar_width - filled - has_partial ))
 
     # Choose color based on usage: blue < 20%, green 20-49%, yellow 50-79%, red >= 80%
     if [ "$used_percentage" -ge 80 ]; then
@@ -88,9 +105,10 @@ if [ -n "$used_percentage" ]; then
         bar_color="${IBlue}"
     fi
 
-    # Use block characters for the graph
+    # Use block characters for the graph: █ full, ▓▒ partial shades, ░ empty
     bar=""
     for ((i=0; i<filled; i++)); do bar+="█"; done
+    bar+="$partial_char"
     for ((i=0; i<empty; i++)); do bar+="░"; done
 
     context_info=$(printf " : ${bar_color}%s${Color_Off} %s%%" "$bar" "$used_percentage")
