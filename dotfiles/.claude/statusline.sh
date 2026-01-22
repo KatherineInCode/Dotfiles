@@ -77,12 +77,23 @@ if [ -n "$used_percentage" ]; then
     filled=$(( used_percentage * bar_width / 100 ))
     empty=$(( bar_width - filled ))
 
+    # Choose color based on usage: blue < 20%, green 20-49%, yellow 50-79%, red >= 80%
+    if [ "$used_percentage" -ge 80 ]; then
+        bar_color="${IRed}"
+    elif [ "$used_percentage" -ge 50 ]; then
+        bar_color="${IYellow}"
+    elif [ "$used_percentage" -ge 20 ]; then
+        bar_color="${IGreen}"
+    else
+        bar_color="${IBlue}"
+    fi
+
     # Use block characters for the graph
     bar=""
     for ((i=0; i<filled; i++)); do bar+="█"; done
     for ((i=0; i<empty; i++)); do bar+="░"; done
 
-    context_info=$(printf " : ${IPurple}%s${Color_Off} %s%%" "$bar" "$used_percentage")
+    context_info=$(printf " : ${bar_color}%s${Color_Off} %s%%" "$bar" "$used_percentage")
 fi
 
 # Output the status line
