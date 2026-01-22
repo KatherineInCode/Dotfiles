@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Source colors from dotfiles
+source ~/.df/includes/colors.bash
+
 # Read JSON input from stdin
 input=$(cat)
 
