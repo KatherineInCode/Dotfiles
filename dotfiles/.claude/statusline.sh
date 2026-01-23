@@ -16,9 +16,9 @@ script_dir="$(cd -P "$(dirname "$script_path")" && pwd)"
 # shellcheck source=../../includes/colors.bash
 source "$script_dir/../../includes/colors.bash"
 
-# Source the context bar function
-# shellcheck source=../../bin/context-bar
-source "$script_dir/../../bin/context-bar"
+# Source the progress bar function
+# shellcheck source=../../bin/progress-bar
+source "$script_dir/../../bin/progress-bar"
 
 # Time
 current_time=$(date +%H:%M) # Like \A in PS1
@@ -84,7 +84,7 @@ model_name=$(echo "$input" | jq -r '.model.display_name')
 used_percentage=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
 
 # Build context info with graph
-context_info=$(build_context_bar "$used_percentage")
+context_info=$(build_progress_bar "$used_percentage")
 
 # Output the status line
 # time user @ host : git : dir : model : context
