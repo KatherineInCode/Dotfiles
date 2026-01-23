@@ -7,11 +7,12 @@ I am an experienced and competent software developer.
 ## Tech Stack
 
 - Primary: Swift with SwiftUI
+- Scripting: Bash
 - Testing: XCTest
 
 ## Common Projects
 
-Everything I work on in code is in the `~/Developer` directory. Folders ending in `ios` are iOS repositories, and folders ending in `android` are Android repositories. In general, I work in the `ios` folder.
+Everything I work on in code is in the `~/Developer` directory, except for my dotfiles repository in `~/.df`. Folders ending in `ios` are iOS repositories, and folders ending in `android` are Android repositories. In general, I work in the `ios` folder.
 
 ## Coding Style
 
