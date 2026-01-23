@@ -3,14 +3,18 @@
 # progress-bar - Build a progress bar with partial fill and color coding
 #
 # Usage:
-#   progress-bar [-w width] [-n] <percentage>
+#   progress-bar [-w width] [-n] [-c] [-r] <percentage>
 #   progress-bar 45                        "████▒░░░░░ 45%"
 #   progress-bar -w 20 45                  "█████████▒░░░░░░░░░░ 45%"
 #   progress-bar -n 45                     "████▒░░░░░"
+#   progress-bar -r 20                     "██░░░░░░░░ 20%" (red, low is bad)
 #
 # Options:
 #   -w <width>    Bar width in characters (default: 10)
 #   -n            Hide the percentage number
+#   -c            Disable colors (plain output)
+#   -r            Reverse color scale (low=red, high=blue)
+#   -h            Show this help message
 #
 # When sourced, provides build_progress_bar() function instead.
 
@@ -18,14 +22,34 @@
 script_dir="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$script_dir/../includes/colors.bash"
 
+show_help() {
+    sed -n '3,18p' "${BASH_SOURCE[0]}" | sed 's/^#[ ]*//'
+}
+
 build_progress_bar() {
     local used_percentage="$1"
     local bar_width="${2:-10}"
     local show_percentage="${3:-1}"
+    local no_color="${4:-0}"
+    local reverse="${5:-0}"
 
     if [ -z "$used_percentage" ]; then
         return
     fi
+
+    # Validate percentage is a number
+    if ! [[ "$used_percentage" =~ ^[0-9]+$ ]]; then
+        echo "error: percentage must be a number" >&2
+        return 1
+    fi
+
+    # Clamp percentage to 0-100
+    if [ "$used_percentage" -lt 0 ]; then
+        used_percentage=0
+    elif [ "$used_percentage" -gt 100 ]; then
+        used_percentage=100
+    fi
+
     local scaled=$(( used_percentage * bar_width ))
     local filled=$(( scaled / 100 ))
     local remainder=$(( scaled % 100 ))
@@ -46,16 +70,34 @@ build_progress_bar() {
     if [ -n "$partial_char" ]; then has_partial=1; fi
     local empty=$(( bar_width - filled - has_partial ))
 
-    # Choose color based on usage: blue < 20%, green 20-49%, yellow 50-79%, red >= 80%
-    local bar_color
-    if [ "$used_percentage" -ge 80 ]; then
-        bar_color="${IRed}"
-    elif [ "$used_percentage" -ge 50 ]; then
-        bar_color="${IYellow}"
-    elif [ "$used_percentage" -ge 20 ]; then
-        bar_color="${IGreen}"
-    else
-        bar_color="${IBlue}"
+    # Choose color based on usage
+    # Normal: blue < 20%, green 20-49%, yellow 50-79%, red >= 80%
+    # Reverse: red < 20%, yellow 20-49%, green 50-79%, blue >= 80%
+    local bar_color=""
+    local color_off=""
+    if [ "$no_color" -eq 0 ]; then
+        color_off="${Color_Off}"
+        if [ "$reverse" -eq 1 ]; then
+            if [ "$used_percentage" -ge 80 ]; then
+                bar_color="${IBlue}"
+            elif [ "$used_percentage" -ge 50 ]; then
+                bar_color="${IGreen}"
+            elif [ "$used_percentage" -ge 20 ]; then
+                bar_color="${IYellow}"
+            else
+                bar_color="${IRed}"
+            fi
+        else
+            if [ "$used_percentage" -ge 80 ]; then
+                bar_color="${IRed}"
+            elif [ "$used_percentage" -ge 50 ]; then
+                bar_color="${IYellow}"
+            elif [ "$used_percentage" -ge 20 ]; then
+                bar_color="${IGreen}"
+            else
+                bar_color="${IBlue}"
+            fi
+        fi
     fi
 
     # Use block characters for the graph: █ full, ▓▒ partial shades, ░ empty
@@ -66,9 +108,9 @@ build_progress_bar() {
     for ((i=0; i<empty; i++)); do bar+="░"; done
 
     if [ "$show_percentage" -eq 1 ]; then
-        printf "${bar_color}%s${Color_Off} %s%%" "$bar" "$used_percentage"
+        printf "${bar_color}%s${color_off} %s%%" "$bar" "$used_percentage"
     else
-        printf "${bar_color}%s${Color_Off}" "$bar"
+        printf "${bar_color}%s${color_off}" "$bar"
     fi
 }
 
@@ -76,14 +118,25 @@ build_progress_bar() {
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     width=10
     show_pct=1
-    while getopts "w:n" opt; do
+    no_color=0
+    reverse=0
+    while getopts "w:ncrh" opt; do
         case $opt in
             w) width="$OPTARG" ;;
             n) show_pct=0 ;;
+            c) no_color=1 ;;
+            r) reverse=1 ;;
+            h) show_help; exit 0 ;;
             *) exit 1 ;;
         esac
     done
     shift $((OPTIND - 1))
 
-    build_progress_bar "$1" "$width" "$show_pct"
+    if [ -z "$1" ]; then
+        echo "error: percentage required" >&2
+        echo "usage: progress-bar [-w width] [-n] [-c] [-r] <percentage>" >&2
+        exit 1
+    fi
+
+    build_progress_bar "$1" "$width" "$show_pct" "$no_color" "$reverse"
 fi
