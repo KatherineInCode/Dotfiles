@@ -3,8 +3,16 @@
 # Read JSON input from stdin
 input=$(cat)
 
+# Resolve script directory for sourcing relative files
+script_dir="$(dirname "$0")"
+
 # Use the same color variables as other dotfiles
-source ../../includes/colors.bash
+# shellcheck source=../../includes/colors.bash
+source "$script_dir/../../includes/colors.bash"
+
+# Source the context bar function
+# shellcheck source=context-bar.sh
+source "$script_dir/context-bar.sh"
 
 # Time
 current_time=$(date +%H:%M) # Like \A in PS1
@@ -70,49 +78,7 @@ model_name=$(echo "$input" | jq -r '.model.display_name')
 used_percentage=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
 
 # Build context info with graph
-context_info=""
-if [ -n "$used_percentage" ]; then
-    # Build a 10-character progress bar with partial fill
-    bar_width=10
-    scaled=$(( used_percentage * bar_width ))
-    filled=$(( scaled / 100 ))
-    remainder=$(( scaled % 100 ))
-
-    # Determine partial character based on remainder (0-99)
-    # Empty (0-33%), ▒ medium (34-66%), ▓ dark (67-99%)
-    partial_char=""
-    if [ "$filled" -lt "$bar_width" ]; then
-        if [ "$remainder" -ge 67 ]; then
-            partial_char="▓"
-        elif [ "$remainder" -ge 34 ]; then
-            partial_char="▒"
-        fi
-    fi
-
-    # Calculate empty slots
-    has_partial=0
-    if [ -n "$partial_char" ]; then has_partial=1; fi
-    empty=$(( bar_width - filled - has_partial ))
-
-    # Choose color based on usage: blue < 20%, green 20-49%, yellow 50-79%, red >= 80%
-    if [ "$used_percentage" -ge 80 ]; then
-        bar_color="${IRed}"
-    elif [ "$used_percentage" -ge 50 ]; then
-        bar_color="${IYellow}"
-    elif [ "$used_percentage" -ge 20 ]; then
-        bar_color="${IGreen}"
-    else
-        bar_color="${IBlue}"
-    fi
-
-    # Use block characters for the graph: █ full, ▓▒ partial shades, ░ empty
-    bar=""
-    for ((i=0; i<filled; i++)); do bar+="█"; done
-    bar+="$partial_char"
-    for ((i=0; i<empty; i++)); do bar+="░"; done
-
-    context_info=$(printf " : ${bar_color}%s${Color_Off} %s%%" "$bar" "$used_percentage")
-fi
+context_info=$(build_context_bar "$used_percentage")
 
 # Output the status line
 # time user @ host : git : dir : model : context
