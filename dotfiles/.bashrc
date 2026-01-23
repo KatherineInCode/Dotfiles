@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Based on https://github.com/holman/dotfiles/blob/master/zsh/zshrc.symlink
 
