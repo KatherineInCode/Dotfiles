@@ -3,8 +3,12 @@
 # progress-bar - Build a progress bar with partial fill and color coding
 #
 # Usage:
-#   progress-bar <percentage>    Output colored progress bar
-#   progress-bar 45              " : ████▒░░░░░ 45%"
+#   progress-bar [-w width] <percentage>
+#   progress-bar 45                        " : ████▒░░░░░ 45%"
+#   progress-bar -w 20 45                  " : █████████▒░░░░░░░░░░ 45%"
+#
+# Options:
+#   -w <width>    Bar width in characters (default: 10)
 #
 # When sourced, provides build_progress_bar() function instead.
 
@@ -22,13 +26,11 @@ source "$script_dir/../includes/colors.bash"
 
 build_progress_bar() {
     local used_percentage="$1"
+    local bar_width="${2:-10}"
 
     if [ -z "$used_percentage" ]; then
         return
     fi
-
-    # Build a 10-character progress bar with partial fill
-    local bar_width=10
     local scaled=$(( used_percentage * bar_width ))
     local filled=$(( scaled / 100 ))
     local remainder=$(( scaled % 100 ))
@@ -73,5 +75,14 @@ build_progress_bar() {
 
 # Run directly if not being sourced
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    build_progress_bar "$1"
+    width=10
+    while getopts "w:" opt; do
+        case $opt in
+            w) width="$OPTARG" ;;
+            *) exit 1 ;;
+        esac
+    done
+    shift $((OPTIND - 1))
+
+    build_progress_bar "$1" "$width"
 fi
