@@ -17,6 +17,7 @@ Everything I work on in code is in the `~/Developer` directory. Folders ending i
 
 - Indentation: 4 spaces
 - When producing documentation comments, I prefer parameters be formatted for multiple parameters, even if there's only one parameter.
+- Shell scripts: Use `#!/usr/bin/env bash` for portability
 
 ## Git Workflow
 
