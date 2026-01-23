@@ -34,6 +34,7 @@ Everything I work on in code is in the `~/Developer` directory, except for my do
 
 - Commit messages: Use imperative mood ("Add feature" not "Added feature")
 - Do not commit automatically. Wait for me to explicitly ask.
+- You do not have authority to push. Do not ask me.
 
 ## Response Style
 
