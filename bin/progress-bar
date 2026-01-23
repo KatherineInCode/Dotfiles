@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# progress-bar - Build a progress bar with partial fill and color coding
+# progress-bar - Print a progress bar with partial fill and color coding
 #
 # Usage:
 #   progress-bar [-w width] [-n] [-c] [-r] <percentage>
@@ -16,7 +16,7 @@
 #   -r            Reverse color scale (low=red, high=blue)
 #   -h            Show this help message
 #
-# When sourced, provides build_progress_bar() function instead.
+# When sourced, provides print_progress_bar() function instead.
 
 # Resolve script directory and source colors
 script_dir="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -26,7 +26,7 @@ show_help() {
     sed -n '3,18p' "${BASH_SOURCE[0]}" | sed 's/^#[ ]*//'
 }
 
-build_progress_bar() {
+print_progress_bar() {
     local used_percentage="$1"
     local bar_width="${2:-10}"
     local show_percentage="${3:-1}"
@@ -138,5 +138,5 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
         exit 1
     fi
 
-    build_progress_bar "$1" "$width" "$show_pct" "$no_color" "$reverse"
+    print_progress_bar "$1" "$width" "$show_pct" "$no_color" "$reverse"
 fi

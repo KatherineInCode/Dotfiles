@@ -84,7 +84,7 @@ model_name=$(echo "$input" | jq -r '.model.display_name')
 used_percentage=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
 
 # Build context info with graph
-context_info=$(build_progress_bar "$used_percentage")
+context_info=$(print_progress_bar "$used_percentage")
 if [ -n "$context_info" ]; then
     context_info=" : $context_info"
 fi
