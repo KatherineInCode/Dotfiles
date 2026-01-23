@@ -85,6 +85,9 @@ used_percentage=$(echo "$input" | jq -r '.context_window.used_percentage // empt
 
 # Build context info with graph
 context_info=$(build_progress_bar "$used_percentage")
+if [ -n "$context_info" ]; then
+    context_info=" : $context_info"
+fi
 
 # Output the status line
 # time user @ host : git : dir : model : context

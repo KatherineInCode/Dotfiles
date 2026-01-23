@@ -62,7 +62,7 @@ build_progress_bar() {
     bar+="$partial_char"
     for ((i=0; i<empty; i++)); do bar+="░"; done
 
-    printf " : ${bar_color}%s${Color_Off} %s%%" "$bar" "$used_percentage"
+    printf "${bar_color}%s${Color_Off} %s%%" "$bar" "$used_percentage"
 }
 
 # Run directly if not being sourced
