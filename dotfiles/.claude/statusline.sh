@@ -89,6 +89,13 @@ if [ -n "$context_info" ]; then
     context_info=" : $context_info"
 fi
 
+# Session cost
+cost_usd=$(echo "$input" | jq -r '.cost.total_cost_usd // empty')
+cost_info=""
+if [ -n "$cost_usd" ]; then
+    cost_info=$(printf " : ${IGreen}\$%.2f${Color_Off}" "$cost_usd")
+fi
+
 # Output the status line
-# time user @ host : git : dir : model : context
-printf "${IBlack}%s${Color_Off} ${IBlue}%s${Color_Off} @ $host_format :%s ${IYellow}%s${Color_Off} : ${IBlue}%s${Color_Off}%s\n" "$current_time" "$current_user" "$current_host" "$git_info" "$display_dir" "$model_name" "$context_info"
+# time user @ host : git : dir : model : context : cost
+printf "${IBlack}%s${Color_Off} ${IBlue}%s${Color_Off} @ $host_format :%s ${IYellow}%s${Color_Off} : ${IBlue}%s${Color_Off}%s%s\n" "$current_time" "$current_user" "$current_host" "$git_info" "$display_dir" "$model_name" "$context_info" "$cost_info"
