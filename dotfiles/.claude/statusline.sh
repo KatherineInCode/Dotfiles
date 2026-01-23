@@ -3,8 +3,14 @@
 # Read JSON input from stdin
 input=$(cat)
 
-# Resolve script directory for sourcing relative files
-script_dir="$(dirname "$0")"
+# Resolve script directory (following symlinks) for sourcing relative files
+script_path="${BASH_SOURCE[0]}"
+while [ -L "$script_path" ]; do
+    script_dir="$(cd -P "$(dirname "$script_path")" && pwd)"
+    script_path="$(readlink "$script_path")"
+    [[ $script_path != /* ]] && script_path="$script_dir/$script_path"
+done
+script_dir="$(cd -P "$(dirname "$script_path")" && pwd)"
 
 # Use the same color variables as other dotfiles
 # shellcheck source=../../includes/colors.bash
