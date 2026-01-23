@@ -3,12 +3,14 @@
 # progress-bar - Build a progress bar with partial fill and color coding
 #
 # Usage:
-#   progress-bar [-w width] <percentage>
-#   progress-bar 45                        " : ████▒░░░░░ 45%"
-#   progress-bar -w 20 45                  " : █████████▒░░░░░░░░░░ 45%"
+#   progress-bar [-w width] [-n] <percentage>
+#   progress-bar 45                        "████▒░░░░░ 45%"
+#   progress-bar -w 20 45                  "█████████▒░░░░░░░░░░ 45%"
+#   progress-bar -n 45                     "████▒░░░░░"
 #
 # Options:
 #   -w <width>    Bar width in characters (default: 10)
+#   -n            Hide the percentage number
 #
 # When sourced, provides build_progress_bar() function instead.
 
@@ -19,6 +21,7 @@ source "$script_dir/../includes/colors.bash"
 build_progress_bar() {
     local used_percentage="$1"
     local bar_width="${2:-10}"
+    local show_percentage="${3:-1}"
 
     if [ -z "$used_percentage" ]; then
         return
@@ -62,19 +65,25 @@ build_progress_bar() {
     bar+="$partial_char"
     for ((i=0; i<empty; i++)); do bar+="░"; done
 
-    printf "${bar_color}%s${Color_Off} %s%%" "$bar" "$used_percentage"
+    if [ "$show_percentage" -eq 1 ]; then
+        printf "${bar_color}%s${Color_Off} %s%%" "$bar" "$used_percentage"
+    else
+        printf "${bar_color}%s${Color_Off}" "$bar"
+    fi
 }
 
 # Run directly if not being sourced
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     width=10
-    while getopts "w:" opt; do
+    show_pct=1
+    while getopts "w:n" opt; do
         case $opt in
             w) width="$OPTARG" ;;
+            n) show_pct=0 ;;
             *) exit 1 ;;
         esac
     done
     shift $((OPTIND - 1))
 
-    build_progress_bar "$1" "$width"
+    build_progress_bar "$1" "$width" "$show_pct"
 fi
