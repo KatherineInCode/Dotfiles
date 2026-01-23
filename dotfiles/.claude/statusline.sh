@@ -17,8 +17,8 @@ script_dir="$(cd -P "$(dirname "$script_path")" && pwd)"
 source "$script_dir/../../includes/colors.bash"
 
 # Source the context bar function
-# shellcheck source=context-bar.sh
-source "$script_dir/context-bar.sh"
+# shellcheck source=../../bin/context-bar
+source "$script_dir/../../bin/context-bar"
 
 # Time
 current_time=$(date +%H:%M) # Like \A in PS1

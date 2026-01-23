@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# context-bar.sh - Build a context usage progress bar with partial fill and color coding
+# context-bar - Build a context usage progress bar with partial fill and color coding
 #
 # Usage:
-#   context-bar.sh <percentage>    Output colored progress bar
-#   context-bar.sh 45              " : ████▒░░░░░ 45%"
+#   context-bar <percentage>    Output colored progress bar
+#   context-bar 45              " : ████▒░░░░░ 45%"
 #
 # When sourced, provides build_context_bar() function instead.
 
@@ -17,8 +17,8 @@ while [ -L "$script_path" ]; do
 done
 script_dir="$(cd -P "$(dirname "$script_path")" && pwd)"
 
-# shellcheck source=../../includes/colors.bash
-source "$script_dir/../../includes/colors.bash"
+# shellcheck source=../includes/colors.bash
+source "$script_dir/../includes/colors.bash"
 
 build_context_bar() {
     local used_percentage="$1"
