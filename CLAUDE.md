@@ -26,10 +26,10 @@ git distribute <command>
 
 ### Directory Structure
 
+- **bin/**: Custom scripts and git subcommands (`color-matrix`, `git-commit-count`, `git-distribute`, `git-sha`, `progress-bar`).
 - **dotfiles/**: Files to be symlinked into `~/` via Stow. The directory structure mirrors the home directory layout.
-- **includes/**: Bash configuration modules (`.bash` files) sourced by `.bashrc` in a specific order: `path.bash` files first, then all others.
-- **bin/**: Custom git subcommands (`git-distribute`, `git-sha`, `git-commit-count`) that extend git functionality.
 - **files/**: Configuration files that need manual installation (Terminal theme, key bindings).
+- **includes/**: Bash configuration modules (`.bash` files) sourced by `.bashrc` in a specific order: `path.bash` files first, then all others.
 
 ### Bash Loading Order
 
@@ -46,6 +46,11 @@ Scripts in `bin/` are automatically available as git subcommands:
 - `git distribute <cmd>`: Runs a git command in all nested git repositories (useful for updating submodules)
 - `git sha`: Returns the short SHA of HEAD
 - `git commit-count`: Returns the number of commits
+
+### Claude Code Integration
+
+- **dotfiles/.claude/statusline.sh**: Custom statusline hook showing time, user, host, git info, directory, model, context usage, and session cost.
+- **bin/progress-bar**: Reusable colored progress bar. Run `progress-bar -h` for usage options.
 
 ## Linting
 
