@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# Display a matrix of all foreground/background color combinations
+
+# shellcheck disable=SC2154,SC1091
+# SC2154: Color variables (Color_Off, etc.) are defined in the sourced colors.bash
+# SC1091: shellcheck can't follow the dynamic source path at analysis time
+
+# Get the directory where this script lives, then source colors.bash
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=../includes/colors.bash
+source "${SCRIPT_DIR}/../includes/colors.bash"
+
+# Foreground color names (standard + high intensity)
+fg_names=(Black Red Green Yellow Blue Purple Cyan White IBlack IRed IGreen IYellow IBlue IPurple ICyan IWhite)
+
+# Background color names (standard + high intensity)
+bg_names=(On_Black On_Red On_Green On_Yellow On_Blue On_Purple On_Cyan On_White On_IBlack On_IRed On_IGreen On_IYellow On_IBlue On_IPurple On_ICyan On_IWhite)
+
+# Loop through each background
+for bg_name in "${bg_names[@]}"; do
+    # Get the background escape sequence via indirect reference
+    bg_code="${!bg_name}"
+
+    # Print background name as row label
+    printf "%-12s " "$bg_name"
+
+    # Loop through each foreground
+    for fg_name in "${fg_names[@]}"; do
+        # Get the foreground escape sequence via indirect reference
+        fg_code="${!fg_name}"
+
+        # Print sample text with color names
+        printf "%b%b %-8s %b" "$bg_code" "$fg_code" "$fg_name" "$Color_Off"
+    done
+    echo
+done
