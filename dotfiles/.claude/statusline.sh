@@ -35,9 +35,9 @@ else
     host_format="${IPurple}%s${Color_Off}"
 fi
 
-# Current directory (like \w in PS1)
+# Current directory name only
 current_dir=$(echo "$input" | jq -r '.workspace.current_dir')
-display_dir="${current_dir/#$HOME/~}"
+display_dir=$(basename "$current_dir")
 
 # Change to working directory
 # cspell:ignore statusline
