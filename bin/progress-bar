@@ -14,8 +14,6 @@
 
 # Resolve script directory and source colors
 script_dir="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-# shellcheck source=../includes/colors.bash
 source "$script_dir/../includes/colors.bash"
 
 build_progress_bar() {
