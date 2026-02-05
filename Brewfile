@@ -21,6 +21,7 @@ brew "gh"
 
 # Development General
 brew "cloc"
+cask "claude-code"
 
 # Shell
 brew "shellcheck"
