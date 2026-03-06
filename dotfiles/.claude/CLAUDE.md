@@ -19,6 +19,7 @@ Everything I work on in code is in the `~/Developer` directory, except for my do
 
 - Indentation: 4 spaces in Swift
 - When producing documentation comments, I prefer parameters be formatted for multiple parameters, even if there's only one parameter.
+- Python docstrings: use Google style (`Args:` / `Returns:` sections).
 - Shell scripts: Use `#!/usr/bin/env bash` for portability
 - When using console logs for debugging, prefix all logs with `[KTB]` to easily identify them.
   - If providing a sequence of logs where there are not good other signposts to use, use the Greek alphabet in order: `[KTB] Alpha`, `[KTB] Beta`, and so on.
