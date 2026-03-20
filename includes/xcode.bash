@@ -25,5 +25,6 @@ alias sbs="Scripts/bootstrap.sh"
 alias csbs="cleardd && sbs"
 alias ccsbs="cleardd && clearsims && sbs"
 
+alias sbsw="sbs && openws"
 alias csbsw="cleardd && sbs && openws"
 alias ccsbsw="cleardd && clearsims && sbs && openws"
