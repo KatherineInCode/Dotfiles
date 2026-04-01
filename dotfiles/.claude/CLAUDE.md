@@ -18,6 +18,7 @@ Everything I work on in code is in the `~/Developer` directory, except for my do
 ## Coding Style
 
 - Indentation: 4 spaces in Swift
+- In Swift, alphabetize enum cases, properties within each `// MARK: -` section, and initializer parameters.
 - When producing documentation comments, I prefer parameters be formatted for multiple parameters, even if there's only one parameter.
 - Python docstrings: use Google style (`Args:` / `Returns:` sections).
 - Shell scripts: Use `#!/usr/bin/env bash` for portability
