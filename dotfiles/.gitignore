@@ -24,6 +24,7 @@ Session.vim
 
 # Xcode
 build/
+export/
 *.pbxuser
 !default.pbxuser
 *.mode1v3
@@ -40,3 +41,4 @@ DerivedData
 *.ipa
 *.xcuserstate
 *.xcscmblueprint
+
