@@ -32,6 +32,7 @@ Everything I work on in code is in the `~/Developer` directory, except for my do
 - Prefer pure functions over state-dependent methods
 - Prefer pass-by-value over pass-by-reference
 - Prefer compile-time errors over run-time errors
+- Avoid `try?` — surface errors rather than silently swallowing them
 
 ## Shell Environment
 
