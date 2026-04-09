@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+# park — park the current worktree
+#
+# Must be run from a ~/Developer/<letter>-ios directory.
+# Checks out <letter>-parked, rebases it onto the latest origin/main,
+# then closes the current tmux window.
+
+set -euo pipefail
+
+DEVELOPER="${HOME}/Developer"
+MAIN_REPO="${DEVELOPER}/ios"
+
+info()  { printf '\033[1;34mpark:\033[0m %s\n' "$*"; }
+err()   { printf '\033[1;31mpark: error:\033[0m %s\n' "$*" >&2; }
+fatal() { err "$*"; exit 1; }
+
+main() {
+    local dir
+    dir="$(pwd)"
+    local folder
+    folder="$(basename "$dir")"
+
+    [[ "$folder" == *-ios ]] \
+        || fatal "not in a greek-letter iOS worktree (current dir: $dir)"
+    [[ "$dir" == "${DEVELOPER}/${folder}" ]] \
+        || fatal "not under ~/Developer — unexpected path: $dir"
+
+    local letter="${folder%-ios}"
+    local parked_branch="${letter}-parked"
+
+    git -C "$dir" rev-parse --verify "$parked_branch" &>/dev/null \
+        || fatal "branch '$parked_branch' not found"
+
+    if ! git -C "$dir" diff --quiet || ! git -C "$dir" diff --cached --quiet; then
+        fatal "uncommitted changes in ${folder} — commit or stash first"
+    fi
+
+    info "checking out ${parked_branch}..."
+    git -C "$dir" checkout "$parked_branch"
+
+    info "fetching origin/main..."
+    git -C "$MAIN_REPO" fetch origin main
+
+    info "rebasing ${parked_branch} onto origin/main..."
+    if ! git -C "$dir" rebase origin/main; then
+        err "rebase failed; aborting"
+        git -C "$dir" rebase --abort 2>/dev/null || true
+        exit 1
+    fi
+
+    info "${letter} parked — closing window"
+
+    [[ -n "${TMUX:-}" ]] && tmux kill-window
+}
+
+main "$@"
