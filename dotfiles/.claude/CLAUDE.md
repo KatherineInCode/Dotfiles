@@ -9,6 +9,7 @@ My name is Katherine. I am an experienced and competent software developer. I do
 - Primary: Swift with SwiftUI
 - Scripting: Bash
 - Testing: XCTest, following the Arrange-Act-Assert pattern as much as possible
+- When converting XCTest files to Swift Testing, read `~/Developer/Swift-Testing-Playbook` for guidance before starting (fallbacks in order: https://gist.github.com/KatherineInCode/251cac2000cd1f7e95dbcf991c8b5c69, https://gist.github.com/steipete/84a5952c22e1ff9b6fe274ab079e3a95)
 - Python testing: `unittest`, asserting against a fully constructed expected value rather than piecewise `assertIn`/`assertNotIn` checks. Where appropriate, include a sentinel entry in the input that should be preserved, to confirm the function does not over-delete or over-modify.
 
 ## Common Projects
