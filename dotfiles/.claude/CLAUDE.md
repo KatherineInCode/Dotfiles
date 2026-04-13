@@ -62,7 +62,7 @@ Everything I work on in code is in the `~/Developer` directory, except for my do
 - Alphabetize enum cases, properties within each `// MARK: -` section, and initializer parameters
 - Avoid `try?` — surface errors rather than silently swallowing them
 - Testing: XCTest, following the Arrange-Act-Assert pattern as much as possible
-- When converting XCTest files to Swift Testing, read `~/Developer/Swift-Testing-Playbook` for guidance before starting (fallbacks in order: <https://gist.github.com/KatherineInCode/251cac2000cd1f7e95dbcf991c8b5c69>, <https://gist.github.com/steipete/84a5952c22e1ff9b6fe274ab079e3a95>)
+- When converting XCTest files to Swift Testing, use the project-level `converting-xctest-to-swift-testing` skill if one exists. Otherwise, read `~/Developer/Swift-Testing-Playbook` for guidance (fallbacks in order: <https://gist.github.com/KatherineInCode/251cac2000cd1f7e95dbcf991c8b5c69>, <https://gist.github.com/steipete/84a5952c22e1ff9b6fe274ab079e3a95>)
 
 ### Python
 
