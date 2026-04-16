@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# log-demo — print one example line at each logging level
+
+set -euo pipefail
+
+SCRIPT_NAME="log-demo"
+# shellcheck source=../includes/logging.bash
+source "$(dirname "$(realpath "$0")")/../includes/logging.bash"
+
+success "everything went great"
+info    "just so you know"
+debug   "this only shows with DEBUG=1 set"
+warn    "something seems off"
+err     "something went wrong"
+echo    "(fatal is not called — it would exit)"
