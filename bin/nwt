@@ -8,24 +8,18 @@
 
 set -euo pipefail
 
-# Parallel arrays: English names (used for dir/branch names) and Unicode characters
-GREEK_NAMES=(
-    alpha beta gamma delta epsilon zeta eta theta iota kappa
-    lambda mu nu xi omicron pi rho sigma tau upsilon phi chi psi omega
-)
-GREEK_CHARS=(
-    $'\u03B1' $'\u03B2' $'\u03B3' $'\u03B4' $'\u03B5' $'\u03B6' $'\u03B7' $'\u03B8' $'\u03B9' $'\u03BA'
-    $'\u03BB' $'\u03BC' $'\u03BD' $'\u03BE' $'\u03BF' $'\u03C0' $'\u03C1' $'\u03C3' $'\u03C4' $'\u03C5'
-    $'\u03C6' $'\u03C7' $'\u03C8' $'\u03C9'
-)
+# shellcheck source=../includes/greek.bash
+source "$(dirname "$(realpath "$0")")/../includes/greek.bash"
+# shellcheck source=../includes/colors.bash
+source "$(dirname "$(realpath "$0")")/../includes/colors.bash"
 
 DEVELOPER="${HOME}/Developer"
 MAIN_REPO="${DEVELOPER}/ios"
 
 # --- helpers -----------------------------------------------------------------
 
-info()  { printf '\033[1;34mnwt:\033[0m %s\n' "$*"; }
-err()   { printf '\033[1;31mnwt: error:\033[0m %s\n' "$*" >&2; }
+info()  { printf "${Bold}${Blue}nwt:${Color_Off} %s\n" "$*"; }
+err()   { printf "${Bold}${Red}nwt: error:${Color_Off} %s\n" "$*" >&2; }
 fatal() { err "$*"; exit 1; }
 
 window_exists() {

@@ -7,11 +7,14 @@
 
 set -euo pipefail
 
+# shellcheck source=../includes/colors.bash
+source "$(dirname "$(realpath "$0")")/../includes/colors.bash"
+
 DEVELOPER="${HOME}/Developer"
 MAIN_REPO="${DEVELOPER}/ios"
 
-info()  { printf '\033[1;34mpark:\033[0m %s\n' "$*"; }
-err()   { printf '\033[1;31mpark: error:\033[0m %s\n' "$*" >&2; }
+info()  { printf "${Bold}${Blue}park:${Color_Off} %s\n" "$*"; }
+err()   { printf "${Bold}${Red}park: error:${Color_Off} %s\n" "$*" >&2; }
 fatal() { err "$*"; exit 1; }
 
 main() {
