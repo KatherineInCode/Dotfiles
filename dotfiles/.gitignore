@@ -43,4 +43,5 @@ DerivedData
 
 # Claude
 .claude/output
+.claude/outputs
 
