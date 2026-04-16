@@ -2,7 +2,7 @@
 #
 # Greek alphabet arrays for worktree scripts
 
-[[ -n "$_GREEK_BASH_LOADED" ]] && return
+[[ -n "${_GREEK_BASH_LOADED:-}" ]] && return
 _GREEK_BASH_LOADED=1
 
 # Parallel arrays mapping Greek letter names to Unicode characters.

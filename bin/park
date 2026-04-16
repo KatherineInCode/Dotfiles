@@ -7,15 +7,12 @@
 
 set -euo pipefail
 
-# shellcheck source=../includes/colors.bash
-source "$(dirname "$(realpath "$0")")/../includes/colors.bash"
+SCRIPT_NAME="park"
+# shellcheck source=../includes/logging.bash
+source "$(dirname "$(realpath "$0")")/../includes/logging.bash"
 
 DEVELOPER="${HOME}/Developer"
 MAIN_REPO="${DEVELOPER}/ios"
-
-info()  { printf "${Bold}${Blue}park:${Color_Off} %s\n" "$*"; }
-err()   { printf "${Bold}${Red}park: error:${Color_Off} %s\n" "$*" >&2; }
-fatal() { err "$*"; exit 1; }
 
 main() {
     local dir

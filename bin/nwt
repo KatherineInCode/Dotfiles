@@ -8,19 +8,14 @@
 
 set -euo pipefail
 
+SCRIPT_NAME="nwt"
 # shellcheck source=../includes/greek.bash
 source "$(dirname "$(realpath "$0")")/../includes/greek.bash"
-# shellcheck source=../includes/colors.bash
-source "$(dirname "$(realpath "$0")")/../includes/colors.bash"
+# shellcheck source=../includes/logging.bash
+source "$(dirname "$(realpath "$0")")/../includes/logging.bash"
 
 DEVELOPER="${HOME}/Developer"
 MAIN_REPO="${DEVELOPER}/ios"
-
-# --- helpers -----------------------------------------------------------------
-
-info()  { printf "${Bold}${Blue}nwt:${Color_Off} %s\n" "$*"; }
-err()   { printf "${Bold}${Red}nwt: error:${Color_Off} %s\n" "$*" >&2; }
-fatal() { err "$*"; exit 1; }
 
 window_exists() {
     local name="$1"

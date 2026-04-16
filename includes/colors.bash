@@ -2,7 +2,7 @@
 #
 # Environment variables for all the colors
 
-[[ -n "$_COLORS_BASH_LOADED" ]] && return
+[[ -n "${_COLORS_BASH_LOADED:-}" ]] && return
 _COLORS_BASH_LOADED=1
 
 # Enable colors in OSX terminal
