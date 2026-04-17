@@ -47,6 +47,9 @@ brew "nss"
 brew "jq"
 cask "quicklook-json"
 
+# Markdown
+brew "markdownlint-cli2"
+
 # Node
 brew "node"
 
