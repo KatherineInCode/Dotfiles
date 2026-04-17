@@ -26,10 +26,10 @@ git distribute <command>
 
 ### Directory Structure
 
-- **bin/**: Custom scripts and git subcommands (`color-matrix`, `git-commit-count`, `git-distribute`, `git-sha`, `progress-bar`).
+- **bin/**: Standalone executable scripts and git subcommands (`color-matrix`, `git-commit-count`, `git-distribute`, `git-sha`, `progress-bar`). For scripts that are run directly or as git subcommands only — not for bash modules that get sourced into the shell.
 - **dotfiles/**: Files to be symlinked into `~/` via Stow. The directory structure mirrors the home directory layout.
 - **files/**: Configuration files that need manual installation (Terminal theme, key bindings).
-- **includes/**: Bash configuration modules (`.bash` files) sourced by `.bashrc` in a specific order: `path.bash` files first, then all others.
+- **includes/**: Bash configuration modules (`.bash` files) sourced by `.bashrc` in a specific order: `path.bash` files first, then all others. New bash utility/helper functions and shell environment additions belong here, not in `bin/`.
 
 ### Bash Loading Order
 
