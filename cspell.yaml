@@ -1,10 +1,12 @@
 ---
 dictionaries:
   - custom-words
+
 dictionaryDefinitions:
   - name: custom-words
     path: ./.cspell/custom-words.txt
     addWords: true
+
 patterns:
   # Ignore multi-line code blocks
   # Ref: https://cspell.org/configuration/patterns/
@@ -27,6 +29,10 @@ patterns:
           .*?         # match any characters, lazily (so that we stop at the next tilde)
           `           # match the closing `
       /gx
+
+ignorePaths:
+  - Brewfile
+
 languageSettings:
   - languageId:
       - markdown

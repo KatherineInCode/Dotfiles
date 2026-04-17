@@ -12,6 +12,7 @@ This repository, as dotfiles repositories are apt to be, under constant construc
 - Install Vundle (`git clone https://github.com/VundleVim/Vundle.vim.git dotfiles/.vim/bundle/Vundle.vim`)
 - Install Rust (`curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`)
 - Install Rust Nightly (`rustup toolchain install nightly`)
+- Install Claude Code (`curl -fsSL https://claude.ai/install.sh | bash`)
 
 ## Update script
 
