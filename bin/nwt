@@ -127,7 +127,7 @@ main() {
         tmux new-window -t "$TMUX_SESSION" -n "$window_name" -c "$dir"
     fi
     tmux split-window -h -c "$dir"
-    tmux send-keys 'brew upgrade claude-code && clear && claude' Enter
+    tmux send-keys 'claude update && clear && claude' Enter
     tmux select-pane -L
 
     info "ready — enjoy ${letter}-ios"
