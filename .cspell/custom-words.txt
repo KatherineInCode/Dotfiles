@@ -5,3 +5,5 @@
 exposé
 trackpad
 Vundle
+worktree
+worktrees

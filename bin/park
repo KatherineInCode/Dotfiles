@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # park — park the current worktree
 #
-# Must be run from a ~/Developer/<letter>-ios directory.
+# Must be run from a ~/Developer/ios/<letter> directory.
 # Checks out <letter>-parked, rebases it onto the latest origin/main,
 # then closes the current tmux window.
 
@@ -12,7 +12,7 @@ SCRIPT_NAME="park"
 source "$(dirname "$(realpath "$0")")/../includes/logging.bash"
 
 DEVELOPER="${HOME}/Developer"
-MAIN_REPO="${DEVELOPER}/ios"
+MAIN_REPO="${DEVELOPER}/ios/main"
 
 main() {
     local dir
@@ -20,12 +20,10 @@ main() {
     local folder
     folder="$(basename "$dir")"
 
-    [[ "$folder" == *-ios ]] \
+    [[ "$(dirname "$dir")" == "${DEVELOPER}/ios" ]] \
         || fatal "not in a greek-letter iOS worktree (current dir: $dir)"
-    [[ "$dir" == "${DEVELOPER}/${folder}" ]] \
-        || fatal "not under ~/Developer — unexpected path: $dir"
 
-    local letter="${folder%-ios}"
+    local letter="$folder"
     local parked_branch="${letter}-parked"
 
     git -C "$dir" rev-parse --verify "$parked_branch" &>/dev/null \

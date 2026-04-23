@@ -15,7 +15,7 @@ source "$(dirname "$(realpath "$0")")/../includes/greek.bash"
 source "$(dirname "$(realpath "$0")")/../includes/logging.bash"
 
 DEVELOPER="${HOME}/Developer"
-MAIN_REPO="${DEVELOPER}/ios"
+MAIN_REPO="${DEVELOPER}/ios/main"
 
 window_exists() {
     local name="$1"
@@ -28,7 +28,7 @@ find_next_available() {
     for (( i = 0; i < ${#GREEK_NAMES[@]}; i++ )); do
         local name="${GREEK_NAMES[$i]}"
         local char="${GREEK_CHARS[$i]}"
-        local dir="${DEVELOPER}/${name}-ios"
+        local dir="${DEVELOPER}/ios/${name}"
 
         [[ -d "$dir" ]] || continue
 
@@ -76,7 +76,7 @@ find_insert_after() {
     # No preceding Greek window found — insert after 'iOS (Main)'.
     local ios_idx
     ios_idx=$(tmux list-windows -t "$TMUX_SESSION" -F '#{window_index} #{window_name}' \
-        | grep ' iOS (Main)$' | cut -d' ' -f1)
+        | grep 'Main' | cut -d' ' -f1)
     printf '%s' "$ios_idx"
 }
 
@@ -99,10 +99,10 @@ main() {
     local rest="${result#* }"
     local char="${rest%% *}"
     local letter_idx="${rest##* }"
-    local dir="${DEVELOPER}/${letter}-ios"
+    local dir="${DEVELOPER}/ios/${letter}"
     local window_name="${char} (Open)"
 
-    info "next available worktree: ${letter}-ios"
+    info "next available worktree: ${letter}"
 
     # Fetch latest main (all worktrees share git objects, one fetch covers all)
     info "fetching origin/main..."
@@ -127,10 +127,10 @@ main() {
         tmux new-window -t "$TMUX_SESSION" -n "$window_name" -c "$dir"
     fi
     tmux split-window -h -c "$dir"
-    tmux send-keys 'claude update && clear && claude' Enter
+    tmux send-keys 'clear && claude' Enter
     tmux select-pane -L
 
-    info "ready — enjoy ${letter}-ios"
+    info "ready — enjoy ${letter}"
 }
 
 main "$@"

@@ -20,7 +20,7 @@ When uncertain about an approach, ask rather than making assumptions.
 
 ### Common Projects
 
-Everything I work on in code is in the `~/Developer` directory, except for my dotfiles repository in `~/.df`. Folders ending in `ios` are iOS repositories, and folders ending in `android` are Android repositories. In general, I work in the `ios` folder.
+Everything I work on in code is in the `~/Developer` directory, except for my dotfiles repository in `~/.df`. Folders ending in `android` are Android repositories. The `ios/` directory is a container: `ios/main` is the main iOS repo, and `ios/[greekletter]` are worktrees (e.g. `ios/alpha`, `ios/beta`). In general, I work in the worktree folders.
 
 ### Shell Environment
 
