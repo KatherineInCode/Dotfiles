@@ -127,7 +127,6 @@ main() {
         tmux new-window -t "$TMUX_SESSION" -n "$window_name" -c "$dir"
     fi
     tmux split-window -h -c "$dir"
-    tmux send-keys 'clear && claude' Enter
     tmux select-pane -L
 
     info "ready — enjoy ${letter}"
