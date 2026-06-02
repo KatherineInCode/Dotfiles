@@ -16,16 +16,6 @@ Be moderately verbose—provide brief explanations when something is non-obvious
 
 When uncertain about an approach, ask rather than making assumptions.
 
-## Tools
-
-### Common Projects
-
-Everything I work on in code is in the `~/Developer` directory, except for my dotfiles repository in `~/.df`. Folders ending in `android` are Android repositories. The `ios/` directory is a container: `ios/main` is the main iOS repo, and `ios/[greekletter]` are worktrees (e.g. `ios/alpha`, `ios/beta`). In general, I work in the worktree folders.
-
-### Shell Environment
-
-- `rm`, `mv`, and `cp` are aliased with `-i` to prompt for confirmation. Use `-f` (for `rm`) or explicitly pass `-n`/`--no-clobber` awareness when needed; for `rm` prefer `rm -f` to avoid stalling on a confirmation prompt.
-
 ### Output Files
 
 When writing documents, reports, plans, or other generated artifacts to disk, save them under `.claude/output/` in the current project, organized by role:
@@ -37,6 +27,16 @@ When writing documents, reports, plans, or other generated artifacts to disk, sa
 - `.claude/output/specs/` — product specs and requirements documents
 
 Use the closest matching subdirectory. If none fit, create a new one with a clear, lowercase, hyphenated name. Never put output files directly in `.claude/output/` without a subdirectory.
+
+## Tools
+
+### Common Projects
+
+Everything I work on in code is in the `~/Developer` directory, except for my dotfiles repository in `~/.df`. Folders ending in `android` are Android repositories. The `ios/` directory is a container: `ios/main` is the main iOS repo, and `ios/[greekletter]` are worktrees (e.g. `ios/alpha`, `ios/beta`). In general, I work in the worktree folders.
+
+### Shell Environment
+
+- `rm`, `mv`, and `cp` are aliased with `-i` to prompt for confirmation. Use `-f` (for `rm`) or explicitly pass `-n`/`--no-clobber` awareness when needed; for `rm` prefer `rm -f` to avoid stalling on a confirmation prompt.
 
 ### Git Workflow
 
