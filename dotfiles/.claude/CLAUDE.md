@@ -37,12 +37,16 @@ Everything I work on in code is in the `~/Developer` directory, except for my do
 ### Shell Environment
 
 - `rm`, `mv`, and `cp` are aliased with `-i` to prompt for confirmation. Use `-f` (for `rm`) or explicitly pass `-n`/`--no-clobber` awareness when needed; for `rm` prefer `rm -f` to avoid stalling on a confirmation prompt.
+- Do not prefix bash commands with `cd <dir> &&` when the working directory is already correct.
 
 ### Git Workflow
 
 - Commit messages: Use imperative mood ("Add feature" not "Added feature")
 - Do not commit automatically. Wait for me to explicitly ask.
 - You do not have authority to push. Do not ask me.
+- Never force push (`--force` or `--force-with-lease`) under any circumstances.
+- Never rebase unless I explicitly ask. Use `git merge` for branch integration.
+- Never squash commits during development. Always create new commits; squashing happens at merge time via GitHub.
 
 ## Coding Philosophy
 
@@ -53,6 +57,10 @@ Everything I work on in code is in the `~/Developer` directory, except for my do
 - Prefer pure functions over state-dependent methods
 - Prefer pass-by-value over pass-by-reference
 - Prefer compile-time errors over run-time errors
+
+### Testing
+
+- Always write boundary tests for threshold conditions. Test the exact threshold value and one step on each side — never only test well inside each zone.
 
 ### Documentation
 
@@ -73,8 +81,10 @@ Everything I work on in code is in the `~/Developer` directory, except for my do
 - Indentation: 4 spaces
 - Alphabetize enum cases, properties within each `// MARK: -` section, and initializer parameters
 - Avoid `try?` — surface errors rather than silently swallowing them
+- Use explicit type initializers: write `Type(...)` not `.init(...)`.
 - Testing: Swift Testing for new tests, following the Arrange-Act-Assert pattern as much as possible. Use XCTest only when adding to an existing XCTest file.
 - When writing or converting Swift Testing tests, use the project-level `converting-xctest-to-swift-testing` skill if one exists. Otherwise, read `~/Developer/Swift-Testing-Playbook` for guidance (fallbacks in order: <https://gist.github.com/KatherineInCode/251cac2000cd1f7e95dbcf991c8b5c69>, <https://gist.github.com/steipete/84a5952c22e1ff9b6fe274ab079e3a95>)
+- Do not add `// Arrange`, `// Act`, or `// Assert` section comments in test functions. Use blank lines to separate the phases instead.
 
 ### Python
 
