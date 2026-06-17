@@ -29,8 +29,8 @@ main() {
     git -C "$dir" rev-parse --verify "$parked_branch" &>/dev/null \
         || fatal "branch '$parked_branch' not found"
 
-    if ! git -C "$dir" diff --quiet || ! git -C "$dir" diff --cached --quiet; then
-        fatal "uncommitted changes in ${folder} — commit or stash first"
+    if [[ -n "$(git -C "$dir" status --porcelain)" ]]; then
+        fatal "uncommitted or untracked changes in ${folder} — commit, stash, or remove first"
     fi
 
     info "checking out ${parked_branch}..."
