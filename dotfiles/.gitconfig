@@ -40,3 +40,5 @@
 	sort = v:refname
 [init]
 	defaultBranch = main
+[http]
+	sslCAInfo = /Library/Application Support/AikidoSecurity/EndpointProtection/run/endpoint-protection-git-combined-ca.pem
