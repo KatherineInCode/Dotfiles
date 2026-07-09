@@ -57,5 +57,5 @@ export NODE_EXTRA_CA_CERTS="/Library/Application Support/AikidoSecurity/Endpoint
 export PIP_CERT="/Library/Application Support/AikidoSecurity/EndpointProtection/run/endpoint-protection-pip-combined-ca.pem"
 export REQUESTS_CA_BUNDLE="/Library/Application Support/AikidoSecurity/EndpointProtection/run/endpoint-protection-pip-combined-ca.pem"
 export POETRY_CERTIFICATES_PYPI_CERT="/Library/Application Support/AikidoSecurity/EndpointProtection/run/endpoint-protection-pip-combined-ca.pem"
-export UV_NATIVE_TLS=true
+export UV_SYSTEM_CERTS=true
 # aikido-endpoint-pip-cert-config-end
