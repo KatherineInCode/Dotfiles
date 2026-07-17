@@ -42,6 +42,7 @@ DerivedData
 *.xcscmblueprint
 
 # Claude
+.claude/assets
 .claude/output
 .claude/outputs
 
