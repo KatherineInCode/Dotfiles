@@ -46,6 +46,7 @@ export BUNDLE_SSL_CA_CERT="/Library/Application Support/AikidoSecurity/EndpointP
 # aikido-endpoint-ruby-cert-config-end
 # aikido-endpoint-curl-cert-config-start
 # Allow curl and other OpenSSL-linked tools to trust the SafeChain MITM CA while preserving the system roots.
+export SSL_CERT_FILE="/Library/Application Support/AikidoSecurity/EndpointProtection/run/endpoint-protection-openssl-combined-ca.pem"
 export CURL_CA_BUNDLE="/Library/Application Support/AikidoSecurity/EndpointProtection/run/endpoint-protection-openssl-combined-ca.pem"
 # aikido-endpoint-curl-cert-config-end
 # aikido-endpoint-cert-config-start
