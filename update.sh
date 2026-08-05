@@ -9,7 +9,7 @@ git distribute pull
 # Homebrew
 
 brew update
-brew upgrade
+brew upgrade --yes
 brew bundle --file=~/.df/Brewfile
 brew cleanup
 
