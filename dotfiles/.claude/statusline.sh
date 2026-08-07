@@ -80,11 +80,24 @@ fi
 # Model name
 model_name=$(echo "$input" | jq -r '.model.display_name')
 
-# Effort level
+# Effort level, colored by tier (low->max) on the same blue/green/yellow/red
+# heat scale progress-bar/color_tokens use. Tier names and their model
+# support are still shifting (xhigh is newer and not universally supported),
+# so a tier not in this list falls back to uncolored rather than erroring.
+EFFORT_LEVELS=(low medium high xhigh max)
+EFFORT_COLORS=("${IBlue}" "${IGreen}" "${IYellow}" "${IRed}" "${Bold}${IRed}")
+
 effort_level=$(echo "$input" | jq -r '.effort.level // empty')
 effort_info=""
 if [ -n "$effort_level" ]; then
-    effort_info=$(printf " : ${ICyan}%s${Color_Off}" "${effort_level^}")
+    effort_color=""
+    for i in "${!EFFORT_LEVELS[@]}"; do
+        if [ "${EFFORT_LEVELS[$i]}" = "$effort_level" ]; then
+            effort_color="${EFFORT_COLORS[$i]}"
+            break
+        fi
+    done
+    effort_info=$(printf " : ${effort_color}%s${Color_Off}" "${effort_level^}")
 fi
 
 # Context window used percentage
