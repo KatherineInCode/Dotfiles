@@ -1,19 +1,5 @@
 #!/usr/bin/env bash
 # nwt — new work tree
-#
-# Usage: nwt [-h] [letter]
-#
-# Without an argument, finds the next available greek-letter iOS worktree (currently
-# on its <letter>-parked branch with no existing tmux window), fetches the latest
-# main, rebases the parked branch onto it, and opens a two-pane window in the correct
-# alphabetical position among the other Greek-letter windows in the current tmux session.
-#
-# With a letter name (e.g. "nwt zeta"), opens that specific worktree instead of the
-# next available one. Errors if the worktree does not exist, is not on its parked
-# branch, or already has an open tmux window.
-#
-# Options:
-#   -h, --help    Show this help message
 
 set -euo pipefail
 
@@ -26,8 +12,23 @@ source "${SCRIPT_DIR}/../includes/logging.bash"
 # shellcheck source=../includes/worktree-helpers.bash
 source "${SCRIPT_DIR}/../includes/worktree-helpers.bash"
 
-show_help() {
-    sed -n '2,16p' "${BASH_SOURCE[0]}" | sed 's/^#[ ]*//'
+usage() {
+    cat <<'EOF'
+Usage: nwt [-h] [letter]
+
+Without an argument, finds the next available greek-letter iOS worktree
+(currently on its <letter>-parked branch with no existing tmux window),
+fetches the latest main, rebases the parked branch onto it, and opens a
+two-pane window in the correct alphabetical position among the other
+Greek-letter windows in the current tmux session.
+
+With a letter name (e.g. "nwt zeta"), opens that specific worktree instead
+of the next available one. Errors if the worktree does not exist, is not
+on its parked branch, or already has an open tmux window.
+
+Options:
+  -h, --help    Show this help message
+EOF
 }
 
 window_exists() {
@@ -128,7 +129,7 @@ find_specific() {
 
 main() {
     if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
-        show_help
+        usage
         exit 0
     fi
 

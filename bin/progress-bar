@@ -2,28 +2,30 @@
 
 # progress-bar - Print a progress bar with partial fill and color coding
 #
-# Usage:
-#   progress-bar [-w width] [-n] [-c] [-r] <percentage>
-#   progress-bar 45                        "████▒░░░░░ 45%"
-#   progress-bar -w 20 45                  "█████████▒░░░░░░░░░░ 45%"
-#   progress-bar -n 45                     "████▒░░░░░"
-#   progress-bar -r 20                     "██░░░░░░░░ 20%" (red, low is bad)
-#
-# Options:
-#   -w <width>    Bar width in characters (default: 10)
-#   -n            Hide the percentage number
-#   -c            Disable colors (plain output)
-#   -r            Reverse color scale (low=red, high=blue)
-#   -h            Show this help message
-#
 # When sourced, provides print_progress_bar() function instead.
 
 # Resolve script directory and source colors
 script_dir="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$script_dir/../includes/colors.bash"
 
-show_help() {
-    sed -n '3,18p' "${BASH_SOURCE[0]}" | sed 's/^#[ ]*//'
+usage() {
+    cat <<'EOF'
+Usage:
+  progress-bar [-w width] [-n] [-c] [-r] <percentage>
+  progress-bar 45                        "████▒░░░░░ 45%"
+  progress-bar -w 20 45                  "█████████▒░░░░░░░░░░ 45%"
+  progress-bar -n 45                     "████▒░░░░░"
+  progress-bar -r 20                     "██░░░░░░░░ 20%" (red, low is bad)
+
+Options:
+  -w <width>    Bar width in characters (default: 10)
+  -n            Hide the percentage number
+  -c            Disable colors (plain output)
+  -r            Reverse color scale (low=red, high=blue)
+  -h            Show this help message
+
+When sourced, provides print_progress_bar() function instead.
+EOF
 }
 
 print_progress_bar() {
@@ -126,7 +128,7 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
             n) show_pct=0 ;;
             c) no_color=1 ;;
             r) reverse=1 ;;
-            h) show_help; exit 0 ;;
+            h) usage; exit 0 ;;
             *) exit 1 ;;
         esac
     done

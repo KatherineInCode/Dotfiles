@@ -1,14 +1,5 @@
 #!/usr/bin/env bash
 # park — park the current worktree
-#
-# Usage: park [-h]
-#
-# Must be run from a ~/Developer/ios/<letter> directory.
-# Checks out <letter>-parked, rebases it onto the latest origin/main,
-# then closes the current tmux window.
-#
-# Options:
-#   -h, --help    Show this help message
 
 set -euo pipefail
 
@@ -19,13 +10,22 @@ source "${SCRIPT_DIR}/../includes/logging.bash"
 # shellcheck source=../includes/worktree-helpers.bash
 source "${SCRIPT_DIR}/../includes/worktree-helpers.bash"
 
-show_help() {
-    sed -n '2,11p' "${BASH_SOURCE[0]}" | sed 's/^#[ ]*//'
+usage() {
+    cat <<'EOF'
+Usage: park [-h]
+
+Must be run from a ~/Developer/ios/<letter> directory.
+Checks out <letter>-parked, rebases it onto the latest origin/main, then
+closes the current tmux window.
+
+Options:
+  -h, --help    Show this help message
+EOF
 }
 
 main() {
     if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
-        show_help
+        usage
         exit 0
     fi
 
