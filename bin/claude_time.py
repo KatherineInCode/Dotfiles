@@ -11,9 +11,15 @@ per-model pricing here to keep in sync.
     python3 claude_time.py --sort branch       # alphabetical
     python3 claude_time.py --sort last -r      # most-recently-touched branches first
 
-Magnitude sort keys (active, in, out, cache, events) default to
+Magnitude sort keys (active, in, out, cache, events, turns) default to
 descending (biggest first); branch/first/last default to ascending.
 --reverse/-r flips whichever direction is the default for the chosen key.
+
+"events" counts every logged event tagged with the branch (user turns,
+tool results, meta events, sidechain — everything). "turns" counts only
+interactive assistant turns (main thread, non-sidechain), matching how
+claude_models.py defines it — a narrower, arguably truer measure of actual
+back-and-forth on that branch.
 """
 import argparse
 import sys
@@ -22,8 +28,8 @@ from datetime import datetime
 
 from claude_sessions import active, color_tokens, fmt, iter_events, sum_tokens, usage_tokens
 
-SORT_KEYS = ("active", "in", "out", "cache", "events", "branch", "first", "last")
-DESCENDING_BY_DEFAULT = {"active", "in", "out", "cache", "events"}  # branch/first/last are ascending
+SORT_KEYS = ("active", "in", "out", "cache", "events", "turns", "branch", "first", "last")
+DESCENDING_BY_DEFAULT = {"active", "in", "out", "cache", "events", "turns"}  # branch/first/last are ascending
 
 parser = argparse.ArgumentParser(
     description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -57,7 +63,8 @@ def sort_value(branch, total, entry):
     Args:
         branch: The branch name.
         total: The branch's active timedelta.
-        entry: The branch's ``{"stamps": [...], "tokens": {...}}`` dict.
+        entry: The branch's ``{"stamps": [...], "tokens": {...}, "turns":
+            int}`` dict.
 
     Returns:
         The value corresponding to the module-level ``args.sort`` key.
@@ -70,6 +77,8 @@ def sort_value(branch, total, entry):
         return max(entry["stamps"])
     if args.sort == "events":
         return len(entry["stamps"])
+    if args.sort == "turns":
+        return entry["turns"]
     if args.sort in ("in", "out"):
         return entry["tokens"][{"in": "input", "out": "output"}[args.sort]]
     if args.sort == "cache":
@@ -77,14 +86,16 @@ def sort_value(branch, total, entry):
     return total  # "active"
 
 
-# Collect timestamps and token usage per branch from every transcript.
-by_branch = defaultdict(lambda: {"stamps": [], "tokens": sum_tokens()})
+# Collect timestamps, token usage, and turn counts per branch from every transcript.
+by_branch = defaultdict(lambda: {"stamps": [], "tokens": sum_tokens(), "turns": 0})
 for _, event in iter_events():
     branch, ts = event.get("gitBranch"), event.get("timestamp")
     if branch and ts and matches(branch):
         entry = by_branch[branch]
         entry["stamps"].append(datetime.fromisoformat(ts.replace("Z", "+00:00")))
         entry["tokens"] = sum_tokens(entry["tokens"], usage_tokens(event))
+        if event.get("type") == "assistant" and not event.get("isSidechain"):
+            entry["turns"] += 1
 
 rows = [(active(v["stamps"]), branch, v) for branch, v in by_branch.items()]
 if not rows:
@@ -93,11 +104,12 @@ if not rows:
 
 rows.sort(key=lambda row: sort_value(row[1], row[0], row[2]), reverse=reverse)
 
-print(f"{'branch':46} {'active':>10}  {'events':>7}  {'in':>7} {'out':>7} {'cache':>7}  first        last")
+print(f"{'branch':46} {'active':>10}  {'events':>7}  {'turns':>6}  {'in':>7} {'out':>7} {'cache':>7}  "
+      f"first        last")
 for total, branch, entry in rows:
     stamps = entry["stamps"]
     tokens = entry["tokens"]
     cache = tokens["cache_write"] + tokens["cache_read"]
-    print(f"{branch[:46]:46} {fmt(total):>10}  {len(stamps):7}  "
+    print(f"{branch[:46]:46} {fmt(total):>10}  {len(stamps):7}  {entry['turns']:6}  "
           f"{color_tokens(tokens['input'])} {color_tokens(tokens['output'])} {color_tokens(cache)}  "
           f"{min(stamps).strftime('%Y-%m-%d')}   {max(stamps).strftime('%Y-%m-%d')}")
