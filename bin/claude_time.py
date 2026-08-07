@@ -13,7 +13,7 @@ import sys
 from collections import defaultdict
 from datetime import datetime
 
-from claude_sessions import active, fmt, fmt_tokens, iter_events, sum_tokens, usage_tokens
+from claude_sessions import active, color_tokens, fmt, iter_events, sum_tokens, usage_tokens
 
 needle = sys.argv[1].lower() if len(sys.argv) > 1 else ""
 
@@ -48,11 +48,11 @@ if not rows:
     print("No matching branches found in ~/.claude/projects/")
     sys.exit(0)
 
-print(f"{'branch':46} {'active':>10}  {'events':>7}  {'in':>6} {'out':>6} {'cache':>7}  first        last")
+print(f"{'branch':46} {'active':>10}  {'events':>7}  {'in':>7} {'out':>7} {'cache':>7}  first        last")
 for total, branch, entry in rows:
     stamps = entry["stamps"]
     tokens = entry["tokens"]
     cache = tokens["cache_write"] + tokens["cache_read"]
     print(f"{branch[:46]:46} {fmt(total):>10}  {len(stamps):7}  "
-          f"{fmt_tokens(tokens['input']):>6} {fmt_tokens(tokens['output']):>6} {fmt_tokens(cache):>7}  "
+          f"{color_tokens(tokens['input'])} {color_tokens(tokens['output'])} {color_tokens(cache)}  "
           f"{min(stamps).strftime('%Y-%m-%d')}   {max(stamps).strftime('%Y-%m-%d')}")

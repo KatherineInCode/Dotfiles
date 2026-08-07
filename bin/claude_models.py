@@ -19,7 +19,7 @@ import sys
 from collections import defaultdict
 from datetime import datetime, timedelta
 
-from claude_sessions import active, fmt, fmt_tokens, iter_events, sum_tokens, usage_tokens
+from claude_sessions import active, color_tokens, fmt, iter_events, sum_tokens, usage_tokens
 
 needle = sys.argv[1].lower() if len(sys.argv) > 1 else ""
 
@@ -114,20 +114,20 @@ if not timeline:
     sys.exit(0)
 
 timeline.sort(key=lambda row: row[0])
-print(f"{'when':16}  {'model':18} {'effort':7} {'active':>8}  {'in':>6} {'out':>6} {'cache':>7}  "
+print(f"{'when':16}  {'model':18} {'effort':7} {'active':>8}  {'in':>7} {'out':>7} {'cache':>7}  "
       f"{'turns':>6}  {'session':8}  switch")
 for start, model, effort, spent, tokens, count, session_id, is_switch in timeline:
     marker = "↳ switched" if is_switch else ""
     cache = tokens["cache_write"] + tokens["cache_read"]
     print(f"{start.strftime('%Y-%m-%d %H:%M'):16}  {short_model(model):18} {effort or '-':7} "
-          f"{fmt(spent):>8}  {fmt_tokens(tokens['input']):>6} {fmt_tokens(tokens['output']):>6} "
-          f"{fmt_tokens(cache):>7}  {count:6}  {session_id[:8]:8}  {marker}")
+          f"{fmt(spent):>8}  {color_tokens(tokens['input'])} {color_tokens(tokens['output'])} "
+          f"{color_tokens(cache)}  {count:6}  {session_id[:8]:8}  {marker}")
 
-print(f"\n{'total by model / effort':26}  {'active':>8}  {'in':>6} {'out':>6} {'cache':>7}")
+print(f"\n{'total by model / effort':26}  {'active':>8}  {'in':>7} {'out':>7} {'cache':>7}")
 for (model, effort), total in sorted(totals.items(), key=lambda kv: kv[1]["active"], reverse=True):
     if not matches(model, effort):
         continue
     tokens = total["tokens"]
     cache = tokens["cache_write"] + tokens["cache_read"]
     print(f"{short_model(model) + ' / ' + (effort or '-'):26}  {fmt(total['active']):>8}  "
-          f"{fmt_tokens(tokens['input']):>6} {fmt_tokens(tokens['output']):>6} {fmt_tokens(cache):>7}")
+          f"{color_tokens(tokens['input'])} {color_tokens(tokens['output'])} {color_tokens(cache)}")

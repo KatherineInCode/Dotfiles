@@ -106,11 +106,16 @@ def sum_tokens(*token_dicts):
 def fmt_tokens(n):
     """Format a token count compactly, abbreviating thousands/millions/billions.
 
+    Plain (unitless) counts get a trailing space in place of a suffix
+    letter, so that right-aligning a column of these strings lines up the
+    digits regardless of whether any individual value has a suffix — e.g.
+    ``"12 "`` and ``"12K"`` both put their final digit in the same column.
+
     Args:
         n: The token count to format.
 
     Returns:
-        A string like ``"142"``, ``"38K"``, ``"5.1M"``, ``"2.0G"``, or
+        A string like ``"142 "``, ``"38K"``, ``"5.1M"``, ``"2.0G"``, or
         ``"1.2T"``.
     """
     if n >= 1_000_000_000_000:
@@ -121,4 +126,43 @@ def fmt_tokens(n):
         return f"{n / 1_000_000:.1f}M"
     if n >= 1_000:
         return f"{n / 1_000:.0f}K"
-    return str(n)
+    return f"{n} "
+
+
+# ANSI colors for token-count suffixes, matching the low-to-high heat scale
+# bin/progress-bar uses for its color-coded bars (blue < green < yellow <
+# red), and the same escape codes as includes/colors.bash's IBlue/IGreen/
+# IYellow/IRed.
+_SUFFIX_COLORS = {
+    "K": "\033[94m",
+    "M": "\033[92m",
+    "G": "\033[93m",
+    "T": "\033[91m",
+}
+_COLOR_OFF = "\033[0m"
+
+
+def color_tokens(n, width=7):
+    """Format a token count, right-aligned, with its unit suffix colored.
+
+    ANSI color codes are invisible characters that inflate a string's
+    length without changing its rendered width, so the width-alignment
+    must happen first and the color codes must be spliced in afterward —
+    wrapping this function's result in another width format spec would
+    miscount the invisible bytes and misalign the column.
+
+    Args:
+        n: The token count to format.
+        width: The field width to right-align the plain digits+suffix to,
+            before any color codes are added.
+
+    Returns:
+        A right-aligned, width-padded string with an ANSI-colored suffix
+        (or no color, for a plain/unitless count).
+    """
+    padded = f"{fmt_tokens(n):>{width}}"
+    suffix = padded[-1]
+    color = _SUFFIX_COLORS.get(suffix)
+    if not color:
+        return padded
+    return f"{padded[:-1]}{color}{suffix}{_COLOR_OFF}"
