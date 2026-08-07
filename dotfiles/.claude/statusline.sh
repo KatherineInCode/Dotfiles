@@ -35,9 +35,12 @@ else
     host_format="${IPurple}%s${Color_Off}"
 fi
 
+base=$(printf "${IBlack}%s${Color_Off} ${IBlue}%s${Color_Off} @ $host_format" "$current_time" "$current_user" "$current_host")
+
 # Current directory name only
 current_dir=$(echo "$input" | jq -r '.workspace.current_dir')
 display_dir=$(basename "$current_dir")
+dir_info=$(printf " : ${IYellow}%s${Color_Off}" "$display_dir")
 
 # Change to working directory
 # cspell:ignore statusline
@@ -74,11 +77,12 @@ GIT_PS1_SHOWUPSTREAM="verbose"
 # Build git info using __git_ps1
 git_info=""
 if git rev-parse --git-dir > /dev/null 2>&1; then
-    git_info=$(printf " ${IRed}%s %s ${Color_Off}:" "$(git_sha)" "$(__git_ps1 "%s")")
+    git_info=$(printf " : ${IRed}%s %s${Color_Off}" "$(git_sha)" "$(__git_ps1 "%s")")
 fi
 
 # Model name
 model_name=$(echo "$input" | jq -r '.model.display_name')
+model_info=$(printf " : ${IBlue}%s${Color_Off}" "$model_name")
 
 # Effort level, colored by tier (low->max) on the same blue/green/yellow/red
 # heat scale progress-bar/color_tokens use. Tier names and their model
@@ -117,5 +121,5 @@ if [ -n "$cost_usd" ]; then
 fi
 
 # Output the status line
-# time user @ host : git : dir : model : effort : context : cost
-printf "${IBlack}%s${Color_Off} ${IBlue}%s${Color_Off} @ $host_format :%s ${IYellow}%s${Color_Off} : ${IBlue}%s${Color_Off}%s%s%s\n" "$current_time" "$current_user" "$current_host" "$git_info" "$display_dir" "$model_name" "$effort_info" "$context_info" "$cost_info"
+# time user @ host : dir : git : model : effort : context : cost
+printf "%s%s%s%s%s%s%s\n" "$base" "$dir_info" "$git_info" "$model_info" "$effort_info" "$context_info" "$cost_info"
