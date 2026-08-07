@@ -166,3 +166,48 @@ def color_tokens(n, width=7):
     if not color:
         return padded
     return f"{padded[:-1]}{color}{suffix}{_COLOR_OFF}"
+
+
+# Generic low-to-high heat scale for any 0-1 intensity value, matching
+# bin/progress-bar's percentage bands (blue < 20%, green 20-49%, yellow
+# 50-79%, red >= 80%) so a heatmap-style script reads consistently with
+# everything else in bin/ that colors by magnitude.
+_HEAT_BLOCKS = (" ", "░", "▒", "▓", "█")
+
+
+def heat_ansi(fraction):
+    """Return the ANSI color for a 0-1 intensity fraction.
+
+    Args:
+        fraction: A value from 0.0 to 1.0, e.g. a bucket's share of the
+            busiest bucket in view.
+
+    Returns:
+        An ANSI color escape code string (blue/green/yellow/red by band).
+    """
+    pct = fraction * 100
+    if pct >= 80:
+        return "\033[91m"  # IRed
+    if pct >= 50:
+        return "\033[93m"  # IYellow
+    if pct >= 20:
+        return "\033[92m"  # IGreen
+    return "\033[94m"  # IBlue
+
+
+def heat_block(fraction):
+    """Return a density block character for a 0-1 intensity fraction.
+
+    Meant to be combined with heat_ansi() for a compact colored heatmap
+    cell — density and color both track intensity.
+
+    Args:
+        fraction: A value from 0.0 to 1.0.
+
+    Returns:
+        One of " ", "░", "▒", "▓", "█", increasing in density with fraction.
+    """
+    if fraction <= 0:
+        return _HEAT_BLOCKS[0]
+    index = min(int(fraction * 4) + 1, 4)
+    return _HEAT_BLOCKS[index]
