@@ -62,3 +62,63 @@ def fmt(d):
     """
     t = int(d.total_seconds())
     return f"{t // 3600}h {t // 60 % 60:02d}m"
+
+
+def usage_tokens(event):
+    """Extract token counts from a transcript event's usage block.
+
+    Only assistant events carry a usage block; any other event (or an
+    assistant event predating a given field) yields zeroes for the missing
+    counts rather than raising.
+
+    Args:
+        event: A parsed transcript event.
+
+    Returns:
+        A dict with integer keys ``"input"``, ``"output"``, ``"cache_write"``,
+        and ``"cache_read"``.
+    """
+    usage = (event.get("message") or {}).get("usage") or {}
+    return {
+        "input": usage.get("input_tokens") or 0,
+        "output": usage.get("output_tokens") or 0,
+        "cache_write": usage.get("cache_creation_input_tokens") or 0,
+        "cache_read": usage.get("cache_read_input_tokens") or 0,
+    }
+
+
+def sum_tokens(*token_dicts):
+    """Add together any number of usage_tokens()-shaped dicts.
+
+    Args:
+        *token_dicts: Dicts as returned by usage_tokens().
+
+    Returns:
+        A dict with the same keys, each the sum across all inputs.
+    """
+    total = {"input": 0, "output": 0, "cache_write": 0, "cache_read": 0}
+    for tokens in token_dicts:
+        for key in total:
+            total[key] += tokens.get(key, 0)
+    return total
+
+
+def fmt_tokens(n):
+    """Format a token count compactly, abbreviating thousands/millions/billions.
+
+    Args:
+        n: The token count to format.
+
+    Returns:
+        A string like ``"142"``, ``"38K"``, ``"5.1M"``, ``"2.0G"``, or
+        ``"1.2T"``.
+    """
+    if n >= 1_000_000_000_000:
+        return f"{n / 1_000_000_000_000:.1f}T"
+    if n >= 1_000_000_000:
+        return f"{n / 1_000_000_000:.1f}G"
+    if n >= 1_000_000:
+        return f"{n / 1_000_000:.1f}M"
+    if n >= 1_000:
+        return f"{n / 1_000:.0f}K"
+    return str(n)
