@@ -13,29 +13,13 @@ switches of either.
 Times are shown in local time. Sidechain (subagent) turns and synthetic
 messages are ignored so the timeline reflects the interactive model only.
 """
-import glob, os, sys
-import json
+import sys
 from collections import defaultdict
 from datetime import datetime, timedelta
 
-IDLE = timedelta(minutes=5)   # gaps longer than this are breaks, not work
+from claude_sessions import active, fmt, iter_events
 
 needle = sys.argv[1].lower() if len(sys.argv) > 1 else ""
-
-
-def active(stamps):
-    """Sum the working time spanned by a sorted-able list of timestamps.
-
-    Gaps longer than IDLE are treated as breaks and excluded.
-
-    Args:
-        stamps: List of timezone-aware datetimes for a single model run.
-
-    Returns:
-        A timedelta of the active (non-idle) time across those stamps.
-    """
-    stamps = sorted(stamps)
-    return sum(((b - a) for a, b in zip(stamps, stamps[1:]) if (b - a) <= IDLE), timedelta())
 
 
 def collapse(events):
@@ -58,19 +42,6 @@ def collapse(events):
     return runs
 
 
-def fmt(d):
-    """Format a timedelta as compact hours and minutes.
-
-    Args:
-        d: The timedelta to format.
-
-    Returns:
-        A string like ``"1h 05m"``.
-    """
-    t = int(d.total_seconds())
-    return f"{t // 3600}h {t // 60 % 60:02d}m"
-
-
 def short_model(model):
     """Trim the redundant ``claude-`` prefix from a model id for display.
 
@@ -85,25 +56,18 @@ def short_model(model):
 
 # Collect (timestamp, model, effort) per session from every transcript.
 sessions = defaultdict(list)
-for path in glob.glob(os.path.expanduser("~/.claude/projects/*/*.jsonl")):
-    session_id = os.path.splitext(os.path.basename(path))[0]
-    with open(path) as fh:
-        for line in fh:
-            try:
-                event = json.loads(line)
-            except ValueError:
-                continue
-            if event.get("type") != "assistant" or event.get("isSidechain"):
-                continue
-            ts = event.get("timestamp")
-            model = (event.get("message") or {}).get("model")
-            if not ts or not model or model.startswith("<"):
-                continue
-            sessions[session_id].append((
-                datetime.fromisoformat(ts.replace("Z", "+00:00")).astimezone(),
-                model,
-                event.get("effort"),
-            ))
+for session_id, event in iter_events():
+    if event.get("type") != "assistant" or event.get("isSidechain"):
+        continue
+    ts = event.get("timestamp")
+    model = (event.get("message") or {}).get("model")
+    if not ts or not model or model.startswith("<"):
+        continue
+    sessions[session_id].append((
+        datetime.fromisoformat(ts.replace("Z", "+00:00")).astimezone(),
+        model,
+        event.get("effort"),
+    ))
 
 
 def matches(model, effort):
