@@ -80,6 +80,13 @@ fi
 # Model name
 model_name=$(echo "$input" | jq -r '.model.display_name')
 
+# Effort level
+effort_level=$(echo "$input" | jq -r '.effort.level // empty')
+effort_info=""
+if [ -n "$effort_level" ]; then
+    effort_info=$(printf " : ${ICyan}%s${Color_Off}" "${effort_level^}")
+fi
+
 # Context window used percentage
 used_percentage=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
 
@@ -97,5 +104,5 @@ if [ -n "$cost_usd" ]; then
 fi
 
 # Output the status line
-# time user @ host : git : dir : model : context : cost
-printf "${IBlack}%s${Color_Off} ${IBlue}%s${Color_Off} @ $host_format :%s ${IYellow}%s${Color_Off} : ${IBlue}%s${Color_Off}%s%s\n" "$current_time" "$current_user" "$current_host" "$git_info" "$display_dir" "$model_name" "$context_info" "$cost_info"
+# time user @ host : git : dir : model : effort : context : cost
+printf "${IBlack}%s${Color_Off} ${IBlue}%s${Color_Off} @ $host_format :%s ${IYellow}%s${Color_Off} : ${IBlue}%s${Color_Off}%s%s%s\n" "$current_time" "$current_user" "$current_host" "$git_info" "$display_dir" "$model_name" "$effort_info" "$context_info" "$cost_info"
