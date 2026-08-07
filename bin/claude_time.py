@@ -6,16 +6,36 @@ branch each was recorded on, and prints active time and token usage per
 branch. Token counts are raw counts, not dollar costs — there's no
 per-model pricing here to keep in sync.
 
-    python3 claude_time.py            # all branches
-    python3 claude_time.py vfo        # only branches matching this substring
+    python3 claude_time.py                    # all branches, most active first
+    python3 claude_time.py vfo                 # only branches matching this substring
+    python3 claude_time.py --sort branch       # alphabetical
+    python3 claude_time.py --sort last -r      # most-recently-touched branches first
+
+Magnitude sort keys (active, in, out, cache, events) default to
+descending (biggest first); branch/first/last default to ascending.
+--reverse/-r flips whichever direction is the default for the chosen key.
 """
+import argparse
 import sys
 from collections import defaultdict
 from datetime import datetime
 
 from claude_sessions import active, color_tokens, fmt, iter_events, sum_tokens, usage_tokens
 
-needle = sys.argv[1].lower() if len(sys.argv) > 1 else ""
+SORT_KEYS = ("active", "in", "out", "cache", "events", "branch", "first", "last")
+DESCENDING_BY_DEFAULT = {"active", "in", "out", "cache", "events"}  # branch/first/last are ascending
+
+parser = argparse.ArgumentParser(
+    description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+parser.add_argument("needle", nargs="?", default="",
+                     help="Only show branches matching this substring")
+parser.add_argument("--sort", choices=SORT_KEYS, default="active",
+                     help="Sort key (default: active)")
+parser.add_argument("-r", "--reverse", action="store_true",
+                     help="Reverse the default sort direction for --sort")
+args = parser.parse_args()
+needle = args.needle.lower()
+reverse = (args.sort in DESCENDING_BY_DEFAULT) ^ args.reverse
 
 
 def matches(branch):
@@ -31,6 +51,32 @@ def matches(branch):
     return not needle or needle in branch.lower()
 
 
+def sort_value(branch, total, entry):
+    """Compute the value to sort a branch row by.
+
+    Args:
+        branch: The branch name.
+        total: The branch's active timedelta.
+        entry: The branch's ``{"stamps": [...], "tokens": {...}}`` dict.
+
+    Returns:
+        The value corresponding to the module-level ``args.sort`` key.
+    """
+    if args.sort == "branch":
+        return branch.lower()
+    if args.sort == "first":
+        return min(entry["stamps"])
+    if args.sort == "last":
+        return max(entry["stamps"])
+    if args.sort == "events":
+        return len(entry["stamps"])
+    if args.sort in ("in", "out"):
+        return entry["tokens"][{"in": "input", "out": "output"}[args.sort]]
+    if args.sort == "cache":
+        return entry["tokens"]["cache_write"] + entry["tokens"]["cache_read"]
+    return total  # "active"
+
+
 # Collect timestamps and token usage per branch from every transcript.
 by_branch = defaultdict(lambda: {"stamps": [], "tokens": sum_tokens()})
 for _, event in iter_events():
@@ -40,13 +86,12 @@ for _, event in iter_events():
         entry["stamps"].append(datetime.fromisoformat(ts.replace("Z", "+00:00")))
         entry["tokens"] = sum_tokens(entry["tokens"], usage_tokens(event))
 
-rows = sorted(
-    ((active(v["stamps"]), branch, v) for branch, v in by_branch.items()),
-    reverse=True,
-)
+rows = [(active(v["stamps"]), branch, v) for branch, v in by_branch.items()]
 if not rows:
     print("No matching branches found in ~/.claude/projects/")
     sys.exit(0)
+
+rows.sort(key=lambda row: sort_value(row[1], row[0], row[2]), reverse=reverse)
 
 print(f"{'branch':46} {'active':>10}  {'events':>7}  {'in':>7} {'out':>7} {'cache':>7}  first        last")
 for total, branch, entry in rows:
