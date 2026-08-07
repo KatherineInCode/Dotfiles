@@ -9,12 +9,18 @@ real tool invocations regardless of which thread made them.
     python3 claude_tools.py           # every tool
     python3 claude_tools.py bash      # only tools matching this substring
 """
+import argparse
 import sys
 from collections import Counter
 
 from claude_sessions import iter_events
 
-needle = sys.argv[1].lower() if len(sys.argv) > 1 else ""
+parser = argparse.ArgumentParser(
+    description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+parser.add_argument("needle", nargs="?", default="",
+                     help="Only show tools matching this substring")
+args = parser.parse_args()
+needle = args.needle.lower()
 
 
 def matches(tool_name):

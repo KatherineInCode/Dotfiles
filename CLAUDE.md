@@ -26,7 +26,7 @@ git distribute <command>
 
 ### Directory Structure
 
-- **bin/**: Standalone executable scripts and git subcommands (`color-matrix`, `git-commit-count`, `git-distribute`, `git-sha`, `progress-bar`). For scripts that are run directly or as git subcommands only — not for bash modules that get sourced into the shell.
+- **bin/**: Standalone executable scripts and git subcommands (`color-matrix`, `git-commit-count`, `git-distribute`, `git-sha`, `progress-bar`). For scripts that are run directly or as git subcommands only — not for bash modules that get sourced into the shell. Also home to a family of Claude Code usage-analysis scripts (`claude_models.py`, `claude_time.py`, `claude_tools.py`, `claude_when.py`), which share logic from `claude_sessions.py` — a plain import-only module, not itself executable, kept alongside them because Python resolves sibling imports from the running script's own directory.
 - **dotfiles/**: Files to be symlinked into `~/` via Stow. The directory structure mirrors the home directory layout.
 - **files/**: Configuration files that need manual installation (Terminal theme, key bindings).
 - **includes/**: Bash configuration modules (`.bash` files) sourced by `.bashrc` in a specific order: `path.bash` files first, then all others. New bash utility/helper functions and shell environment additions belong here, not in `bin/`.
