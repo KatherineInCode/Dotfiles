@@ -83,6 +83,26 @@ if not sessions:
     sys.exit(0)
 
 
+def trim_range(counts):
+    """Find the index range spanning the first through last non-empty bucket.
+
+    Drops only leading/trailing all-empty buckets (e.g. the dead overnight
+    hours), not an isolated quiet bucket in the middle of an otherwise busy
+    stretch.
+
+    Args:
+        counts: Ordered list of per-bucket event counts.
+
+    Returns:
+        A (start, end) tuple for slicing. If every bucket is empty, returns
+        (0, len(counts)) so the view still prints instead of disappearing.
+    """
+    nonzero = [i for i, count in enumerate(counts) if count > 0]
+    if not nonzero:
+        return 0, len(counts)
+    return nonzero[0], nonzero[-1] + 1
+
+
 def print_bucket_view(header, labels, active_by_bucket, count_by_bucket):
     """Print a single-dimension active-time table with an intensity bar.
 
@@ -106,12 +126,15 @@ def print_bucket_view(header, labels, active_by_bucket, count_by_bucket):
 if args.by == "hour":
     active_by_hour = [sum((active_grid[w][h] for w in range(7)), timedelta()) for h in range(24)]
     count_by_hour = [sum(count_grid[w][h] for w in range(7)) for h in range(24)]
-    print_bucket_view("hour", [f"{h:02d}" for h in range(24)], active_by_hour, count_by_hour)
+    labels = [f"{h:02d}" for h in range(24)]
+    start, end = trim_range(count_by_hour)
+    print_bucket_view("hour", labels[start:end], active_by_hour[start:end], count_by_hour[start:end])
 
 elif args.by == "weekday":
     active_by_day = [sum(active_grid[w].values(), timedelta()) for w in range(7)]
     count_by_day = [sum(count_grid[w].values()) for w in range(7)]
-    print_bucket_view("day", list(WEEKDAY_NAMES), active_by_day, count_by_day)
+    start, end = trim_range(count_by_day)
+    print_bucket_view("day", list(WEEKDAY_NAMES[start:end]), active_by_day[start:end], count_by_day[start:end])
 
 else:  # "grid"
     busiest = timedelta()
@@ -120,14 +143,21 @@ else:  # "grid"
             busiest = max(busiest, active_grid[w][h])
     max_seconds = busiest.total_seconds() or 1
 
+    row_counts = [sum(count_grid[w][h] for w in range(7)) for h in range(24)]
+    col_counts = [sum(count_grid[w].values()) for w in range(7)]
+    row_start, row_end = trim_range(row_counts)
+    col_start, col_end = trim_range(col_counts)
+    hours = range(row_start, row_end)
+    weekdays = range(col_start, col_end)
+
     # Each column is 4 chars wide (1 separator space + 3-char content) in
     # both the header and the data rows, so they line up. Pad the plain
     # 2-char block to that width *before* adding color — ANSI codes are
     # invisible characters that would otherwise throw off the padding.
-    print("    " + "".join(f" {name:>3}" for name in WEEKDAY_NAMES))
-    for h in range(24):
+    print("    " + "".join(f" {WEEKDAY_NAMES[w]:>3}" for w in weekdays))
+    for h in hours:
         row = [f"{h:02d}  "]
-        for w in range(7):
+        for w in weekdays:
             fraction = active_grid[w][h].total_seconds() / max_seconds
             plain_cell = f"{heat_block(fraction) * 2:<3}"
             color = heat_ansi(fraction) if fraction > 0 else ""
