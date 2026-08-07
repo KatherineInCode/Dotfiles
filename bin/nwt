@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # nwt — new work tree
 #
-# Usage: nwt [letter]
+# Usage: nwt [-h] [letter]
 #
 # Without an argument, finds the next available greek-letter iOS worktree (currently
 # on its <letter>-parked branch with no existing tmux window), fetches the latest
@@ -11,17 +11,24 @@
 # With a letter name (e.g. "nwt zeta"), opens that specific worktree instead of the
 # next available one. Errors if the worktree does not exist, is not on its parked
 # branch, or already has an open tmux window.
+#
+# Options:
+#   -h, --help    Show this help message
 
 set -euo pipefail
 
 SCRIPT_NAME="nwt"
+SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 # shellcheck source=../includes/greek.bash
-source "$(dirname "$(realpath "$0")")/../includes/greek.bash"
+source "${SCRIPT_DIR}/../includes/greek.bash"
 # shellcheck source=../includes/logging.bash
-source "$(dirname "$(realpath "$0")")/../includes/logging.bash"
+source "${SCRIPT_DIR}/../includes/logging.bash"
+# shellcheck source=../includes/worktree-helpers.bash
+source "${SCRIPT_DIR}/../includes/worktree-helpers.bash"
 
-DEVELOPER="${HOME}/Developer"
-MAIN_REPO="${DEVELOPER}/ios/main"
+show_help() {
+    sed -n '2,16p' "${BASH_SOURCE[0]}" | sed 's/^#[ ]*//'
+}
 
 window_exists() {
     local name="$1"
@@ -120,6 +127,11 @@ find_specific() {
 # --- main --------------------------------------------------------------------
 
 main() {
+    if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+        show_help
+        exit 0
+    fi
+
     if [[ -z "${TMUX:-}" ]]; then
         fatal "not inside a tmux session"
     fi
@@ -143,17 +155,9 @@ main() {
 
     info "opening worktree: ${letter}"
 
-    # Fetch latest main (all worktrees share git objects, one fetch covers all)
-    info "fetching origin/main..."
-    git -C "$MAIN_REPO" fetch origin main
-
-    # Rebase the parked branch onto the freshly fetched main
-    info "rebasing ${letter}-parked onto origin/main..."
-    if ! git -C "$dir" rebase origin/main; then
-        err "rebase failed; aborting"
-        git -C "$dir" rebase --abort 2>/dev/null || true
-        exit 1
-    fi
+    # Fetch latest main and rebase the parked branch onto it (all worktrees
+    # share git objects, so one fetch covers all of them)
+    fetch_and_rebase_onto_main "$dir" "${letter}-parked"
 
     # Insert the new window in the correct alphabetical slot
     info "opening window '${window_name}'..."

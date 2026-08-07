@@ -1,20 +1,34 @@
 #!/usr/bin/env bash
 # park — park the current worktree
 #
+# Usage: park [-h]
+#
 # Must be run from a ~/Developer/ios/<letter> directory.
 # Checks out <letter>-parked, rebases it onto the latest origin/main,
 # then closes the current tmux window.
+#
+# Options:
+#   -h, --help    Show this help message
 
 set -euo pipefail
 
 SCRIPT_NAME="park"
+SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 # shellcheck source=../includes/logging.bash
-source "$(dirname "$(realpath "$0")")/../includes/logging.bash"
+source "${SCRIPT_DIR}/../includes/logging.bash"
+# shellcheck source=../includes/worktree-helpers.bash
+source "${SCRIPT_DIR}/../includes/worktree-helpers.bash"
 
-DEVELOPER="${HOME}/Developer"
-MAIN_REPO="${DEVELOPER}/ios/main"
+show_help() {
+    sed -n '2,11p' "${BASH_SOURCE[0]}" | sed 's/^#[ ]*//'
+}
 
 main() {
+    if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+        show_help
+        exit 0
+    fi
+
     local dir
     dir="$(pwd)"
     local folder
@@ -36,15 +50,7 @@ main() {
     info "checking out ${parked_branch}..."
     git -C "$dir" checkout "$parked_branch"
 
-    info "fetching origin/main..."
-    git -C "$MAIN_REPO" fetch origin main
-
-    info "rebasing ${parked_branch} onto origin/main..."
-    if ! git -C "$dir" rebase origin/main; then
-        err "rebase failed; aborting"
-        git -C "$dir" rebase --abort 2>/dev/null || true
-        exit 1
-    fi
+    fetch_and_rebase_onto_main "$dir" "$parked_branch"
 
     info "${letter} parked — closing window"
 
