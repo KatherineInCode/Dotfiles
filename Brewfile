@@ -39,7 +39,7 @@ cask "asset-catalog-tinkerer"
 cask "android-studio"
 
 # API Development
-#cask "charles"
+cask "charles"
 brew "mkcert"
 brew "nss"
 
