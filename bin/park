@@ -15,12 +15,41 @@ usage() {
 Usage: park [-h]
 
 Must be run from a ~/Developer/ios/<letter> directory.
-Checks out <letter>-parked, rebases it onto the latest origin/main, then
-closes the current tmux window.
+Checks out <letter>-parked, rebases it onto the latest origin/main, removes
+the worktree's build/ directory, then closes the current tmux window.
 
 Options:
   -h, --help    Show this help message
 EOF
+}
+
+# Removes the worktree's build/ directory, which holds only regenerable Xcode
+# DerivedData (build products, module caches, and SPM checkouts). Reports the
+# space reclaimed. Skips silently when the directory is absent, and refuses to
+# act when git does not consider build/ ignored — in that case it may hold
+# tracked or otherwise unexpected content.
+#
+# Args:
+#   $1 - dir: path to the worktree whose build/ directory should be removed.
+remove_build_dir() {
+    local dir="$1"
+    local build_dir="${dir}/build"
+
+    if [[ ! -d "$build_dir" ]]; then
+        debug "no build directory at ${build_dir}"
+        return
+    fi
+
+    if ! git -C "$dir" check-ignore -q build; then
+        warn "build/ is not gitignored in ${dir} — leaving it in place"
+        return
+    fi
+
+    local size="unknown size"
+    size="$(du -sh "$build_dir" 2>/dev/null | cut -f1)" || size="unknown size"
+
+    info "removing build directory (${size})..."
+    rm -rf "$build_dir"
 }
 
 main() {
@@ -51,6 +80,8 @@ main() {
     git -C "$dir" checkout "$parked_branch"
 
     fetch_and_rebase_onto_main "$dir" "$parked_branch"
+
+    remove_build_dir "$dir"
 
     info "${letter} parked — closing window"
 
