@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
 cleandd() {
+    if [[ -d build/DerivedData ]]; then
+        echo "Removing ./build/DerivedData ($(du -sh build/DerivedData | cut -f1))..."
+        rm -rf build/DerivedData
+    fi
+
     rm -rf ~/Library/Developer/Xcode/DerivedData
     echo "Removed all derived data."
 }
