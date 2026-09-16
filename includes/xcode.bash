@@ -12,6 +12,18 @@ cleandd() {
 
 alias cleardd=cleandd
 
+cleanbuild() {
+    local d
+    for d in build export; do
+        if [[ -d "$d" ]]; then
+            echo "Removing ./${d} ($(du -sh "$d" | awk '{print $1}'))..."
+            rm -rf "$d"
+        fi
+    done
+}
+
+alias clearbuild=cleanbuild
+
 cleansims() {
     xcrun simctl --set previews delete all
     echo "Deleted all cached previews."
