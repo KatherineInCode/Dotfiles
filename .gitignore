@@ -8,3 +8,7 @@ __pycache__/
 dotfiles/.vim/backup
 dotfiles/.vim/bundle
 dotfiles/.vim/.netrwhist
+
+# Aikido
+dotfiles/*.aikido-backup
+
