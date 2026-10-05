@@ -28,6 +28,25 @@ When writing documents, reports, plans, or other generated artifacts to disk, sa
 
 Use the closest matching subdirectory. If none fit, create a new one with a clear, lowercase, hyphenated name. Never put output files directly in `.claude/output/` without a subdirectory.
 
+### Diagrams
+
+Lean toward including diagrams when explaining code or writing documents. I'd rather have one too many than one too few.
+
+Include a diagram when the explanation involves any of:
+
+- Control or data flow across more than two functions, types, or files
+- A sequence of calls or messages between components (e.g., view → view model → service → API)
+- State machines or lifecycle transitions
+- Type, protocol, or module relationships (ownership, conformance, dependency direction)
+- Before/after comparisons of a structural change
+
+Format by destination:
+
+- **Terminal responses**: ASCII or Unicode box-drawing diagrams in a fenced code block. Mermaid does not render in the terminal.
+- **Files on disk** (plans, specs, reports, PR descriptions, docs): Mermaid in a fenced `mermaid` block.
+
+Keep each diagram focused on one idea. Use several small diagrams instead of one large one. Follow each diagram with a sentence or two of prose; don't let the diagram replace the explanation.
+
 ## Tools
 
 ### Common Projects
