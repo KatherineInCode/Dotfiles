@@ -67,6 +67,20 @@ Everything I work on in code is in the `~/Developer` directory, except for my do
 - Never rebase unless I explicitly ask. Use `git merge` for branch integration.
 - Never squash commits during development. Always create new commits; squashing happens at merge time via GitHub.
 
+### Pull Request Slicing
+
+When planning PRs for a ticket or feature, default to many small, stacked PRs rather than one or a few large ones. I would rather review eight focused PRs than two broad ones.
+
+- Each PR does exactly one thing. If summarizing it requires "and," split it.
+- Each PR must leave the branch building with tests passing. It does not need to be user-visible; landing code that only the next PR in the stack uses is fine.
+- Never mix refactoring and behavior changes in one PR. Renames, file moves, and mechanical changes get their own PR.
+- Tests ship in the same PR as the code they cover.
+- Aim for roughly 200 changed lines of hand-written code per PR. If a slice is bigger, look for a seam to split it along.
+- A typical stack order: preparatory refactors (no behavior change) → new types/models → data/service layer → business logic → UI → wiring or feature flag → removal of old code paths.
+- When presenting a plan, list the stack in order. Give each PR a one-line purpose and note what it depends on.
+- If you think two slices belong together, propose them separately anyway and explain why you would combine them. I will make the call.
+- This applies during implementation too: if you notice an unrelated fix or cleanup, flag it as a separate PR instead of folding it in.
+
 ## Coding Philosophy
 
 ### General
